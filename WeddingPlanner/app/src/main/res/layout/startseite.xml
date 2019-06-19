@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_height="match_parent"
+    android:layout_width="match_parent">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:id="@+id/tipps_caption"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="Tipp des Tages"
+            android:textSize="30sp"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/tipp_tages"
+            android:layout_below="@id/tipps_caption"
+            android:gravity="center"/>
+
+        <ImageView
+            android:id="@+id/startseite_logo"
+            android:layout_below="@id/tipp_tages"
+            android:layout_width="wrap_content"
+            android:layout_height="200dp"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="20dp"
+            app:srcCompat="@drawable/logo" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/startseite_logo"
+            android:layout_centerHorizontal="true"
+            android:text="Mit diesem liebevoll erstellten Weddingplanner möchte ich allen Heiratswilligen eine Hilfestellung bei der Planung ihrer Traumhochzeit bieten.\n\n
+
+Mit diesem Buch habt ihr die richtige Wahl getroffen, um euren Tag zu einem ganz Besonderen zu machen. Außerdem hoffe ich, euch hiermit inspirieren zu können.\n\n
+
+Ich wünsche euch einen wundervollen, einzigartigen Tag, den ihr niemals vergessen werdet, aber vor allem ganz viel Liebe und Gesundheit für eure Zukunft."/>
+
+    </RelativeLayout>
+</ScrollView>

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="main_drawer_layout" type="id"/>
+    <item name="main_nav_view" type="id"/>
+    <item name="all_content_inflated" type="id"/>
+</resources>

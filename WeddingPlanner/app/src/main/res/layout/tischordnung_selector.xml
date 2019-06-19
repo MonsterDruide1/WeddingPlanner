@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/white"
+    tools:context=".TischordnungSelector">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        android:baselineAligned="false">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <ImageButton
+                android:layout_width="match_parent"
+                android:layout_margin="15dp"
+                android:id="@+id/tischform_u"
+                android:layout_height="wrap_content"
+                android:src="@drawable/tische_u_prev"
+                android:onClick="startNames"
+                android:background="@android:color/transparent"
+                android:scaleType="fitStart"
+                android:adjustViewBounds="true"/>
+
+            <ImageButton
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="15dp"
+                android:id="@+id/tischform_e"
+                android:src="@drawable/tische_e"
+                android:onClick="startNames"
+                android:background="@android:color/transparent"
+                android:scaleType="fitStart"
+                android:adjustViewBounds="true"/>
+
+            <ImageButton
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="15dp"
+                android:id="@+id/tischform_u_geschlossen"
+                android:src="@drawable/tische_u_geschlossen"
+                android:onClick="startNames"
+                android:background="@android:color/transparent"
+                android:scaleType="fitStart"
+                android:adjustViewBounds="true"/>
+
+            <ImageButton
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="15dp"
+                android:id="@+id/tischform_frei_rund"
+                android:src="@drawable/tische_frei_rund"
+                android:onClick="startNames"
+                android:background="@android:color/transparent"
+                android:scaleType="fitStart"
+                android:adjustViewBounds="true"/>
+
+            <ImageButton
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="15dp"
+                android:id="@+id/tischform_tafel_frei"
+                android:src="@drawable/tische_tafel_frei"
+                android:onClick="startNames"
+                android:background="@android:color/transparent"
+                android:scaleType="fitStart"
+                android:adjustViewBounds="true"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <ImageButton
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:src="@drawable/tische_t_prev"
+                android:layout_margin="15dp"
+                android:onClick="startNames"
+                android:id="@+id/tischform_t"
+                android:background="@android:color/transparent"
+                android:scaleType="fitStart"
+                android:adjustViewBounds="true"/>
+
+            <ImageButton
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="15dp"
+                android:id="@+id/tischform_tafel_lang"
+                android:src="@drawable/tische_tafel_lang"
+                android:onClick="startNames"
+                android:background="@android:color/transparent"
+                android:scaleType="fitStart"
+                android:adjustViewBounds="true"/>
+
+            <ImageButton
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="15dp"
+                android:id="@+id/tischform_u_ungeschlossen"
+                android:src="@drawable/tische_u_ungeschlossen"
+                android:onClick="startNames"
+                android:background="@android:color/transparent"
+                android:scaleType="fitStart"
+                android:adjustViewBounds="true"/>
+
+            <ImageButton
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="15dp"
+                android:id="@+id/tischform_frei_eckig"
+                android:src="@drawable/tische_frei_eckig"
+                android:onClick="startNames"
+                android:background="@android:color/transparent"
+                android:scaleType="fitStart"
+                android:adjustViewBounds="true"/>
+
+            <ImageButton
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="15dp"
+                android:id="@+id/tischform_tafel_einzel"
+                android:src="@drawable/tische_tafel_einzel"
+                android:onClick="startNames"
+                android:background="@android:color/transparent"
+                android:scaleType="fitStart"
+                android:adjustViewBounds="true"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</ScrollView>
