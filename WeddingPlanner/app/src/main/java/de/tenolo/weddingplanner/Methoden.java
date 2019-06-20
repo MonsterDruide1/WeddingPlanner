@@ -2,6 +2,8 @@ package de.tenolo.weddingplanner;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -81,7 +83,7 @@ class Methoden {
                     currentActivity.startActivity(intent);
                 }
                 break;
-            case "Tischordnung":
+            case "Raumplanung":
                 if (!selectedItem.equals(currentNav)) {
                     currentActivity.startActivity(new Intent(currentActivity, TischordnungSelector.class));
                 }
@@ -89,6 +91,141 @@ class Methoden {
             case "Gästeliste":
                 if (!selectedItem.equals(currentNav)) {
                     currentActivity.startActivity(new Intent(currentActivity, Gaesteliste.class));
+                }
+                break;
+            case "VIPS":
+                if (!selectedItem.equals(currentNav)) {
+                    Parcelable[] parcels = new Parcelable[7];
+
+                    Intent intent = new Intent(currentActivity, AllgemeineSeite.class);
+
+                    {
+                        Object[] types = new Object[]{"", new DatePickerFragment(), new DatePickerFragment(), "", "",0,0};
+                        String[] hints = new String[]{"Namen", "Zusammen seit", "Wunsch Hochzeitsdatum", "Eure größten Träume", "Was ihr euch für die Zukunft wünscht","Ringgröße Braut", "Ringgröße Bräutigam"};
+                        String listenname = "Braut & Bräutigam";
+                        int anzahlFelder = 2;
+                        String name = "braut_braeutigam";
+                        String specials = " disableNew=true ";
+                        String groupName = expandableListData.keySet().toArray(new String[0])[groupPosition];
+
+                        JSONArray typesArray = new JSONArray();
+                        for (Object o : types) {
+                            typesArray.put(o);
+                        }
+                        AllgemeinesObject object = new AllgemeinesObject(typesArray.toString(),hints,listenname,anzahlFelder,name,specials,groupName);
+
+                        parcels[0]=object;
+                    }
+                    {
+                        Object[] types = new Object[]{"", new DatePickerFragment(), ""};
+                        String[] hints = new String[]{"Name", "Geboren am", "Telefonnummer"};
+                        String listenname = "Trauzeugin";
+                        int anzahlFelder = 2;
+                        String name = "trauzeugin";
+                        String specials = " disableNew=true ";
+                        String groupName = expandableListData.keySet().toArray(new String[0])[groupPosition];
+
+                        JSONArray typesArray = new JSONArray();
+                        for (Object o : types) {
+                            typesArray.put(o);
+                        }
+                        AllgemeinesObject object = new AllgemeinesObject(typesArray.toString(),hints,listenname,anzahlFelder,name,specials,groupName);
+
+                        parcels[1]=object;
+                    }
+                    {
+                        Object[] types = new Object[]{"", new DatePickerFragment(), ""};
+                        String[] hints = new String[]{"Name", "Geboren am", "Telefonnummer"};
+                        String listenname = "Brautjungfern";
+                        int anzahlFelder = 2;
+                        String name = "brautjungfern";
+                        String specials = " disableNew=true ";
+                        String groupName = expandableListData.keySet().toArray(new String[0])[groupPosition];
+
+                        JSONArray typesArray = new JSONArray();
+                        for (Object o : types) {
+                            typesArray.put(o);
+                        }
+                        AllgemeinesObject object = new AllgemeinesObject(typesArray.toString(),hints,listenname,anzahlFelder,name,specials,groupName);
+
+                        parcels[2]=object;
+                    }
+                    {
+                        Object[] types = new Object[]{"", new DatePickerFragment(), ""};
+                        String[] hints = new String[]{"Name", "Geboren am", "Telefonnummer"};
+                        String listenname = "Trauzeuge";
+                        int anzahlFelder = 2;
+                        String name = "trauzeuge";
+                        String specials = " disableNew=true ";
+                        String groupName = expandableListData.keySet().toArray(new String[0])[groupPosition];
+
+                        JSONArray typesArray = new JSONArray();
+                        for (Object o : types) {
+                            typesArray.put(o);
+                        }
+                        AllgemeinesObject object = new AllgemeinesObject(typesArray.toString(),hints,listenname,anzahlFelder,name,specials,groupName);
+
+                        parcels[3]=object;
+                    }
+                    {
+                        Object[] types = new Object[]{"", new DatePickerFragment(), ""};
+                        String[] hints = new String[]{"Name", "Geboren am", "Telefonnummer"};
+                        String listenname = "Groosmen";
+                        int anzahlFelder = 2;
+                        String name = "groosmen";
+                        String specials = " disableNew=true ";
+                        String groupName = expandableListData.keySet().toArray(new String[0])[groupPosition];
+
+                        JSONArray typesArray = new JSONArray();
+                        for (Object o : types) {
+                            typesArray.put(o);
+                        }
+                        AllgemeinesObject object = new AllgemeinesObject(typesArray.toString(),hints,listenname,anzahlFelder,name,specials,groupName);
+
+                        parcels[4]=object;
+                    }
+                    {
+                        Object[] types = new Object[]{"", new DatePickerFragment(), ""};
+                        String[] hints = new String[]{"Name", "Geboren am", "Telefonnummer"};
+                        String listenname = "Blumenkind/-er";
+                        int anzahlFelder = 2;
+                        String name = "blumenkinder";
+                        String specials = " disableNew=true ";
+                        String groupName = expandableListData.keySet().toArray(new String[0])[groupPosition];
+
+                        JSONArray typesArray = new JSONArray();
+                        for (Object o : types) {
+                            typesArray.put(o);
+                        }
+                        AllgemeinesObject object = new AllgemeinesObject(typesArray.toString(),hints,listenname,anzahlFelder,name,specials,groupName);
+
+                        parcels[5]=object;
+                    }
+                    {
+                        Object[] types = new Object[]{"", new DatePickerFragment(), ""};
+                        String[] hints = new String[]{"Name", "Geboren am", "Telefonnummer"};
+                        String listenname = "Ringbringer/-in";
+                        int anzahlFelder = 2;
+                        String name = "ringbringer";
+                        String specials = " disableNew=true ";
+                        String groupName = expandableListData.keySet().toArray(new String[0])[groupPosition];
+
+                        JSONArray typesArray = new JSONArray();
+                        for (Object o : types) {
+                            typesArray.put(o);
+                        }
+                        AllgemeinesObject object = new AllgemeinesObject(typesArray.toString(),hints,listenname,anzahlFelder,name,specials,groupName);
+
+                        parcels[6]=object;
+                    }
+
+
+                    intent.putExtra("listTypes",new String[]{"AllgemeineListe","AllgemeineListe","AllgemeineListe","AllgemeineListe","AllgemeineListe","AllgemeineListe","AllgemeineListe"});
+                    intent.putExtra("parcelables",parcels);
+
+                    intent.putExtra("navID","Zeitplan");
+
+                    currentActivity.startActivity(intent);
                 }
                 break;
             case "Budgetübersicht":
@@ -105,23 +242,17 @@ class Methoden {
                     float[] weights = new float[]{0.5f,1f,0.5f};
                     String groupName = expandableListData.keySet().toArray(new String[0])[groupPosition];
 
-                    Intent intent = new Intent(currentActivity, AllgemeineTabelle.class);
+                    Intent intent = new Intent(currentActivity, AllgemeineSeite.class);
 
                     JSONArray typesArray = new JSONArray();
                     for(Object o : types){
                         typesArray.put(o);
                     }
 
-                    intent.putExtra("types",typesArray.toString());
-                    intent.putExtra("hints",hints);
-                    intent.putExtra("listenname",listenname);
-                    intent.putExtra("anzahlFelder",anzahlFelder);
-                    intent.putExtra("name",name);
-                    intent.putExtra("specials",specials);
-                    intent.putExtra("weights",weights);
-                    intent.putExtra("editable",editable);
-                    intent.putExtra("shown",shown);
-                    intent.putExtra("groupName",groupName);
+                    AllgemeinesObject object = new AllgemeinesObject(typesArray.toString(),hints,listenname,anzahlFelder,name,specials,weights,editable,shown,groupName);
+
+                    intent.putExtra("listTypes",new String[]{"AllgemeineTabelle"});
+                    intent.putExtra("parcelables",new Parcelable[]{object});
 
                     intent.putExtra("navID","Budgetübersicht");
 
@@ -141,23 +272,17 @@ class Methoden {
                     float[] weights = new float[]{1f,0.5f};
                     String groupName = expandableListData.keySet().toArray(new String[0])[groupPosition];
 
-                    Intent intent = new Intent(currentActivity, AllgemeineTabelle.class);
+                    Intent intent = new Intent(currentActivity, AllgemeineSeite.class);
 
                     JSONArray typesArray = new JSONArray();
                     for(Object o : types){
                         typesArray.put(o);
                     }
 
-                    intent.putExtra("types",typesArray.toString());
-                    intent.putExtra("hints",hints);
-                    intent.putExtra("listenname",listenname);
-                    intent.putExtra("anzahlFelder",anzahlFelder);
-                    intent.putExtra("name",name);
-                    intent.putExtra("specials",specials);
-                    intent.putExtra("weights",weights);
-                    intent.putExtra("editable",editable);
-                    intent.putExtra("shown",shown);
-                    intent.putExtra("groupName",groupName);
+                    AllgemeinesObject object = new AllgemeinesObject(typesArray.toString(),hints,listenname,anzahlFelder,name,specials,weights,editable,shown,groupName);
+
+                    intent.putExtra("listTypes",new String[]{"AllgemeineTabelle"});
+                    intent.putExtra("parcelables",new Parcelable[]{object});
 
                     intent.putExtra("navID","To do");
 
@@ -177,23 +302,17 @@ class Methoden {
                     float[] weights = new float[]{0.2f,1f};
                     String groupName ="";
 
-                    Intent intent = new Intent(currentActivity, AllgemeineTabelle.class);
+                    Intent intent = new Intent(currentActivity, AllgemeineSeite.class);
 
                     JSONArray typesArray = new JSONArray();
                     for(Object o : types){
                         typesArray.put(o);
                     }
 
-                    intent.putExtra("types",typesArray.toString());
-                    intent.putExtra("hints",hints);
-                    intent.putExtra("listenname",listenname);
-                    intent.putExtra("anzahlFelder",anzahlFelder);
-                    intent.putExtra("name",name);
-                    intent.putExtra("specials",specials);
-                    intent.putExtra("weights",weights);
-                    intent.putExtra("editable",editable);
-                    intent.putExtra("shown",shown);
-                    intent.putExtra("groupName",groupName);
+                    AllgemeinesObject object = new AllgemeinesObject(typesArray.toString(),hints,listenname,anzahlFelder,name,specials,weights,editable,shown,groupName);
+
+                    intent.putExtra("listTypes",new String[]{"AllgemeineTabelle"});
+                    intent.putExtra("parcelables",new Parcelable[]{object});
 
                     intent.putExtra("navID","Zeitplan");
 
@@ -213,23 +332,17 @@ class Methoden {
                     float[] weights = new float[]{1f,1f};
                     String groupName = expandableListData.keySet().toArray(new String[0])[groupPosition];
 
-                    Intent intent = new Intent(currentActivity, AllgemeineTabelle.class);
+                    Intent intent = new Intent(currentActivity, AllgemeineSeite.class);
 
                     JSONArray typesArray = new JSONArray();
                     for(Object o : types){
                         typesArray.put(o);
                     }
 
-                    intent.putExtra("types",typesArray.toString());
-                    intent.putExtra("hints",hints);
-                    intent.putExtra("listenname",listenname);
-                    intent.putExtra("anzahlFelder",anzahlFelder);
-                    intent.putExtra("name",name);
-                    intent.putExtra("specials",specials);
-                    intent.putExtra("weights",weights);
-                    intent.putExtra("editable",editable);
-                    intent.putExtra("shown",shown);
-                    intent.putExtra("groupName",groupName);
+                    AllgemeinesObject object = new AllgemeinesObject(typesArray.toString(),hints,listenname,anzahlFelder,name,specials,weights,editable,shown,groupName);
+
+                    intent.putExtra("listTypes",new String[]{"AllgemeineTabelle"});
+                    intent.putExtra("parcelables",new Parcelable[]{object});
 
                     intent.putExtra("navID","Zeitplan");
 
@@ -249,23 +362,17 @@ class Methoden {
                     String specials = "";
                     String groupName = expandableListData.keySet().toArray(new String[0])[groupPosition];
 
-                    Intent intent = new Intent(currentActivity, AllgemeineTabelle.class);
+                    Intent intent = new Intent(currentActivity, AllgemeineSeite.class);
 
                     JSONArray typesArray = new JSONArray();
                     for(Object o : types){
                         typesArray.put(o);
                     }
 
-                    intent.putExtra("types",typesArray.toString());
-                    intent.putExtra("hints",hints);
-                    intent.putExtra("listenname",listenname);
-                    intent.putExtra("anzahlFelder",anzahlFelder);
-                    intent.putExtra("name",name);
-                    intent.putExtra("specials",specials);
-                    intent.putExtra("editable",editable);
-                    intent.putExtra("shown",shown);
-                    intent.putExtra("groupName",groupName);
-                    intent.putExtra("weights",weights);
+                    AllgemeinesObject object = new AllgemeinesObject(typesArray.toString(),hints,listenname,anzahlFelder,name,specials,weights,editable,shown,groupName);
+
+                    intent.putExtra("listTypes",new String[]{"AllgemeineTabelle"});
+                    intent.putExtra("parcelables",new Parcelable[]{object});
 
                     intent.putExtra("navID","Zeitplan");
 
@@ -282,20 +389,17 @@ class Methoden {
                     String specials = " disableNew=true ";
                     String groupName = expandableListData.keySet().toArray(new String[0])[groupPosition];
 
-                    Intent intent = new Intent(currentActivity, AllgemeineListe.class);
+                    Intent intent = new Intent(currentActivity, AllgemeineSeite.class);
 
                     JSONArray typesArray = new JSONArray();
                     for(Object o : types){
                         typesArray.put(o);
                     }
 
-                    intent.putExtra("types",typesArray.toString());
-                    intent.putExtra("hints",hints);
-                    intent.putExtra("listenname",listenname);
-                    intent.putExtra("anzahlFelder",anzahlFelder);
-                    intent.putExtra("name",name);
-                    intent.putExtra("specials",specials);
-                    intent.putExtra("groupName",groupName);
+                    AllgemeinesObject object = new AllgemeinesObject(typesArray.toString(),hints,listenname,anzahlFelder,name,specials,groupName);
+
+                    intent.putExtra("listTypes",new String[]{"AllgemeineListe"});
+                    intent.putExtra("parcelables",new Parcelable[]{object});
 
                     intent.putExtra("navID","Zeitplan");
 
@@ -328,9 +432,9 @@ class Methoden {
         map.put(items[1],kap2);
         map.put(items[2],kap3);*/
 
-        List<String> vips = Collections.emptyList();
-        List<String> zeitplan = Arrays.asList("Zeitplan","To do","Wer hilft mit?"); //TODO Wer hilft mit?
-        List<String> location = Arrays.asList("Location Angebote","Raumplanung","Dekowünsche","Besorgungen","Unterhaltungsprogramm","Budgetübersicht"); //TODO Location Angebote, Dekowünsche, Besorgungen, Unterhaltungsprogramm FIXME Name Budgetübersicht,Raumplanung
+        List<String> vips = Collections.singletonList("VIPS");
+        List<String> zeitplan = Arrays.asList("Zeitplan","To do","Wer hilft mit?");
+        List<String> location = Arrays.asList("Location Angebote","Raumplanung","Dekowünsche","Besorgungen","Unterhaltungsprogramm","Budgetübersicht"); //TODO Location Angebote, Dekowünsche, Besorgungen, Unterhaltungsprogramm
         List<String> tagesablauf = Arrays.asList("Startklar machen","Trauung","Besorgungen","Hochzeitsfahrzeug Angebote","Budgetübersicht");
         List<String> gaeste = Arrays.asList("Gästeliste","Gastgeschenke","Übernachtungsgäste","Was wir uns wünschen","Budgetübersicht");
         List<String> essenTrinken = Arrays.asList("Sektempfang / Candybar","Wer bringt was mit?","Menüplanung","Hochzeitstorte","Budgetübersicht");

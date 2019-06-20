@@ -1,11 +1,15 @@
 package de.tenolo.weddingplanner;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.os.Parcelable;
+import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.text.InputType;
@@ -33,7 +37,7 @@ import static de.tenolo.weddingplanner.Startseite.prefs;
 
 public class AllgemeineListe extends AppCompatActivity {
 
-    private RelativeLayout mainLayout;
+    //private RelativeLayout mainLayout;
     //0.2f -> FLOAT == GELD-BETRAG -> Summe am Ende ;;;;;; 0.1 -> DOUBLE == NORMALE KOMMA-ZAHL -> keine Summe am Ende
 
     private Object[] types;
@@ -44,7 +48,7 @@ public class AllgemeineListe extends AppCompatActivity {
     private String specials;
     private String groupName;
 
-    @Override
+    /*@Override
     public void onCreate(Bundle bundle) {
         super.onCreate(bundle);
         setContentView(R.layout.all_main);
@@ -52,9 +56,12 @@ public class AllgemeineListe extends AppCompatActivity {
         Methoden methoden = new Methoden();
         methoden.onCreateFillIn(this,getIntent().getStringExtra("navID"),R.layout.gaesteliste);
 
-        Intent intent = getIntent();
+        new AllgemeineListe(getIntent(),this,(findViewById(R.id.liste_add)),(RelativeLayout) findViewById(R.id.gaesteliste_main));
+    }*/
+
+    public AllgemeineListe(AllgemeinesObject object, Context context, Activity activity, final View listeAdd, RelativeLayout mainLayout){
         try {
-            String typesExtra = intent.getStringExtra("types");
+            String typesExtra = object.types;
             JSONArray typesArray = (new JSONArray(typesExtra));
             types = new Object[typesArray.length()];
             for(int i=0;i<types.length;i++){
@@ -81,42 +88,63 @@ public class AllgemeineListe extends AppCompatActivity {
             return;
         }
 
-        hints = intent.getStringArrayExtra("hints");
-        listenname = intent.getStringExtra("listenname");
-        anzahlFelder = intent.getIntExtra("anzahlFelder",0);
-        name = intent.getStringExtra("name");
-        specials = intent.getStringExtra("specials");
-        groupName = intent.getStringExtra("groupName");
+        hints = object.hints;
+        listenname = object.listenname;
+        anzahlFelder = object.anzahlFelder;
+        name = object.name;
+        specials = object.specials;
+        groupName = object.groupName;
 
-        mainLayout = findViewById(R.id.gaesteliste_main);
+        prefs = context.getSharedPreferences("Prefs",MODE_PRIVATE);
 
-        prefs = getSharedPreferences("Prefs",MODE_PRIVATE);
+        /*if(specials.contains(" disableNew=true ")){
+            listeAdd.setVisibility(View.INVISIBLE);
+        }*/
+        if(!specials.contains(" disableNew=true ")){
+            FloatingActionButton button = new FloatingActionButton(context);
+            button.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    listeAdd(v);
+                }
+            });
+            button.setImageResource(R.drawable.round_plus_one_black_36);
 
-        if(specials.contains(" disableNew=true ")){
-            (findViewById(R.id.liste_add)).setVisibility(View.INVISIBLE);
+            RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            params.setMargins(16,16,16,16);
+            params.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
+            params.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+            params.addRule(RelativeLayout.ALIGN_PARENT_END);
+
+            button.setLayoutParams(params);
+
+            mainLayout.addView(button);
         }
 
-        generateLayout(this);
+
+        generateLayout(context,activity,mainLayout);
     }
 
-    private void generateLayout(final Context context){
+    public AllgemeineListe(){}
+
+    private void generateLayout(final Context context, final Activity activity, RelativeLayout mainLayout){
         String[] list = (loadOrdered(name)!=null) ? (loadOrdered(name)) : new String[0];
         System.out.println(Arrays.deepToString(list));
 
-        View prevRow = makeCaptions(context);
+        View prevRow = makeCaptions(context,mainLayout);
 
         for (int i=0;i<hints.length;i++) {
             try {
                 String strings = list[i];
-                prevRow = generateNewRow(strings, context, prevRow, i);
+                prevRow = generateNewRow(strings,activity,context, prevRow, i,mainLayout);
             }
             catch(ArrayIndexOutOfBoundsException ignored){
-                prevRow = generateNewRow("",context,prevRow,i);
+                prevRow = generateNewRow("",activity,context,prevRow,i,mainLayout);
             }
         }
     }
 
-    private View makeCaptions(final Context context){
+    private View makeCaptions(final Context context, RelativeLayout mainLayout){
         RelativeLayout.LayoutParams mainParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT,RelativeLayout.LayoutParams.WRAP_CONTENT);
 
         TextView tv = new TextView(context);
@@ -143,7 +171,7 @@ public class AllgemeineListe extends AppCompatActivity {
         return t;
     }
 
-    private View generateNewRow(final String entry, final Context context, View prevRow, final int i){
+    private View generateNewRow(final String entry, final Activity activity, final Context context, View prevRow, final int i, final RelativeLayout mainLayout){
 
         boolean bezahlt = false;
         if(specials.contains(" bezahlt=gruen ")){
@@ -254,7 +282,7 @@ public class AllgemeineListe extends AppCompatActivity {
                                     }
 
                                     mainLayout.removeAllViews();
-                                    generateLayout(context);
+                                    generateLayout(context,activity,mainLayout);
                                 }
                             });
                         }
@@ -275,7 +303,7 @@ public class AllgemeineListe extends AppCompatActivity {
             layout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    showDialog(context, entry,i);
+                    showDialog(context, activity, entry,i,mainLayout);
                 }
             });
         }
@@ -330,7 +358,7 @@ public class AllgemeineListe extends AppCompatActivity {
         saveOrdered(listNew,name);
     }
 
-    private void showDialog(final Context context, final String oldEntry, final int ie){
+    private void showDialog(final Context context, final Activity activity, final String oldEntry, final int ie, final RelativeLayout mainLayout){
         boolean overrideOld=true;
         if(oldEntry.equals("")){
             overrideOld=false;
@@ -394,7 +422,7 @@ public class AllgemeineListe extends AppCompatActivity {
                     public void onClick(View view) {
                         final Object obj= "WAITING FOR DATEPICKER";
                         final DatePickerFragment newFragment = new DatePickerFragment(obj);
-                        newFragment.show(getSupportFragmentManager(),"datePicker");
+                        newFragment.show(((FragmentActivity)activity).getSupportFragmentManager(),"datePicker");
                         new Thread(new Runnable() {
                             @Override
                             public void run() {
@@ -536,7 +564,7 @@ public class AllgemeineListe extends AppCompatActivity {
                         }
 
                         mainLayout.removeAllViews();
-                        generateLayout(context);
+                        generateLayout(context,activity,mainLayout);
                     }
                 })
                 .setNegativeButton("Abbrechen", new DialogInterface.OnClickListener() {

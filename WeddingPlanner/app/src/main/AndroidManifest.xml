@@ -25,11 +25,9 @@
         <activity
             android:name=".Gaesteliste"/>
         <activity
-            android:name=".AllgemeineTabelle"/>
+            android:name=".AllgemeineSeite"/>
         <activity
             android:name=".Einstellungen"/>
-        <activity
-            android:name=".AllgemeineListe"/>
 
 
 

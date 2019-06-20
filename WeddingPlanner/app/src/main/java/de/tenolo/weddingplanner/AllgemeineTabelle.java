@@ -1,11 +1,14 @@
 package de.tenolo.weddingplanner;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.text.InputType;
@@ -30,9 +33,8 @@ import java.util.Locale;
 
 import static de.tenolo.weddingplanner.Startseite.prefs;
 
-public class AllgemeineTabelle extends AppCompatActivity {
+public class AllgemeineTabelle {
 
-    private RelativeLayout mainLayout;
     //0.2f -> FLOAT == GELD-BETRAG -> Summe am Ende ;;;;;; 0.1 -> DOUBLE == NORMALE KOMMA-ZAHL -> keine Summe am Ende
 
     private Object[] types;
@@ -46,7 +48,7 @@ public class AllgemeineTabelle extends AppCompatActivity {
     private boolean[] editable;
     private String groupName;
 
-    @Override
+    /*@Override
     public void onCreate(Bundle bundle) {
         super.onCreate(bundle);
         setContentView(R.layout.all_main);
@@ -54,9 +56,12 @@ public class AllgemeineTabelle extends AppCompatActivity {
         Methoden methoden = new Methoden();
         methoden.onCreateFillIn(this,getIntent().getStringExtra("navID"),R.layout.gaesteliste);
 
-        Intent intent = getIntent();
+        new AllgemeineTabelle(getIntent(),this,(findViewById(R.id.liste_add)),(RelativeLayout) findViewById(R.id.gaesteliste_main));
+    }*/
+
+    public AllgemeineTabelle(AllgemeinesObject object, final Context context, final Activity activity, View listeAdd, RelativeLayout mainLayout){
         try {
-            String typesExtra = intent.getStringExtra("types");
+            String typesExtra = object.types;
             JSONArray typesArray = (new JSONArray(typesExtra));
             types = new Object[typesArray.length()];
             for(int i=0;i<types.length;i++){
@@ -83,28 +88,48 @@ public class AllgemeineTabelle extends AppCompatActivity {
             return;
         }
 
-        hints = intent.getStringArrayExtra("hints");
-        listenname = intent.getStringExtra("listenname");
-        anzahlFelder = intent.getIntExtra("anzahlFelder",0);
-        name = intent.getStringExtra("name");
-        specials = intent.getStringExtra("specials");
-        weights = intent.getFloatArrayExtra("weights");
-        editable = intent.getBooleanArrayExtra("editable");
-        shown = intent.getBooleanArrayExtra("shown");
-        groupName = intent.getStringExtra("groupName");
+        hints = object.hints;
+        listenname = object.listenname;
+        anzahlFelder = object.anzahlFelder;
+        name = object.name;
+        specials = object.specials;
+        weights = object.weights;
+        editable = object.editable;
+        shown = object.shown;
+        groupName = object.groupName;
 
-        mainLayout = findViewById(R.id.gaesteliste_main);
+        prefs = context.getSharedPreferences("Prefs", Context.MODE_PRIVATE);
 
-        prefs = getSharedPreferences("Prefs",MODE_PRIVATE);
+        /*if(specials.contains(" disableNew=true ")){
+            listeAdd.setVisibility(View.INVISIBLE);
+        }*/
+        if(!specials.contains(" disableNew=true ")){
+            FloatingActionButton button = new FloatingActionButton(context);
+            button.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    listeAdd(v,context,activity);
+                }
+            });
+            button.setImageResource(R.drawable.round_plus_one_black_36);
 
-        if(specials.contains(" disableNew=true ")){
-            (findViewById(R.id.liste_add)).setVisibility(View.INVISIBLE);
+            RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            params.setMargins(16,16,16,16);
+            params.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
+            params.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+            params.addRule(RelativeLayout.ALIGN_PARENT_END);
+
+            button.setLayoutParams(params);
+
+            mainLayout.addView(button);
         }
 
-        generateLayout(this);
+        generateLayout(context, activity, mainLayout);
     }
 
-    private void generateLayout(final Context context){
+    public AllgemeineTabelle(){}
+
+    private void generateLayout(final Context context, final Activity activity, RelativeLayout mainLayout){
         String[][] listold = (loadOrdered(name)!=null) ? (loadOrdered(name)) : new String[0][anzahlFelder];
 
         final String[][] list = new String[listold.length+1][anzahlFelder];
@@ -121,11 +146,11 @@ public class AllgemeineTabelle extends AppCompatActivity {
         View prevRow = null;
         float[] sums = new float[anzahlFelder];
 
-        prevRow = makeCaptions(hints,context,weights);
+        prevRow = makeCaptions(hints,context,weights,mainLayout);
 
         for (int i=0;i<list.length;i++) {
             String[] strings = list[i];
-            prevRow = generateNewRow(strings, context, prevRow, weights, false,i);
+            prevRow = generateNewRow(strings, context, activity, prevRow, weights, false,i,mainLayout);
 
 
             sums = calcSums(list);
@@ -170,11 +195,11 @@ public class AllgemeineTabelle extends AppCompatActivity {
                 }
             }
 
-            generateNewRow(row,context,prevRow,weights,true,1);
+            generateNewRow(row,context,activity, prevRow,weights,true,1,mainLayout);
         }
     }
 
-    private View makeCaptions(final String[] hints, final Context context, float[] weights){
+    private View makeCaptions(final String[] hints, final Context context, float[] weights, RelativeLayout mainLayout){
         RelativeLayout.LayoutParams mainParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT,RelativeLayout.LayoutParams.WRAP_CONTENT);
 
         TextView tv = new TextView(context);
@@ -237,7 +262,7 @@ public class AllgemeineTabelle extends AppCompatActivity {
         return sums;
     }
 
-    private View generateNewRow(final String[] entry, final Context context, View prevRow, float[] weights, boolean sumRow, int i){
+    private View generateNewRow(final String[] entry, final Context context, final Activity activity, View prevRow, float[] weights, boolean sumRow, int i, final RelativeLayout mainLayout){
 
         boolean bezahlt = false;
         if(specials.contains(" bezahlt=gruen ")){
@@ -314,7 +339,7 @@ public class AllgemeineTabelle extends AppCompatActivity {
                                 replace(entry,newEntry);
 
                                 mainLayout.removeAllViews();
-                                generateLayout(context);
+                                generateLayout(context,activity,mainLayout);
                             }
                         });
                     }
@@ -334,7 +359,7 @@ public class AllgemeineTabelle extends AppCompatActivity {
             layout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    showDialog(context, true, entry);
+                    showDialog(context, activity, true, entry,mainLayout);
                 }
             });
         }
@@ -404,7 +429,7 @@ public class AllgemeineTabelle extends AppCompatActivity {
         saveOrdered(listNew,name);
     }
 
-    private void showDialog(final Context context, final boolean overrideOld, final String[] oldEntry){
+    private void showDialog(final Context context, final Activity activity, final boolean overrideOld, final String[] oldEntry, final RelativeLayout mainLayout){
 
         LinearLayout dialogView = new LinearLayout(context);
         dialogView.setOrientation(LinearLayout.VERTICAL);
@@ -441,7 +466,7 @@ public class AllgemeineTabelle extends AppCompatActivity {
                             public void onClick(View view) {
                                 final Object obj= "WAITING FOR DATEPICKER";
                                 final DatePickerFragment newFragment = new DatePickerFragment(obj);
-                                newFragment.show(getSupportFragmentManager(),"datePicker");
+                                newFragment.show(((FragmentActivity)activity).getSupportFragmentManager(),"datePicker");
                                 new Thread(new Runnable() {
                                     @Override
                                     public void run() {
@@ -450,7 +475,7 @@ public class AllgemeineTabelle extends AppCompatActivity {
                                                 obj.wait();
                                             }
                                             final String date = newFragment.day+"."+ newFragment.month+"."+ newFragment.year;
-                                            runOnUiThread(new Runnable() {
+                                            activity.runOnUiThread(new Runnable() {
                                                 @Override
                                                 public void run() {
                                                     aktuell.setText(date);
@@ -568,7 +593,7 @@ public class AllgemeineTabelle extends AppCompatActivity {
                         append(result);
 
                         mainLayout.removeAllViews();
-                        generateLayout(context);
+                        generateLayout(context, activity, mainLayout);
                     }
                 })
                 .setNegativeButton("Abbrechen", new DialogInterface.OnClickListener() {
@@ -578,8 +603,8 @@ public class AllgemeineTabelle extends AppCompatActivity {
         builder.show();
     }
 
-    public void listeAdd(View view){
-        showDialog(this,false,null);
+    public void listeAdd(View view, Context context, Activity activity){
+        showDialog(context, activity, false,null, (RelativeLayout) view.getParent());
     }
 
     private String[][] loadOrdered(String name){
