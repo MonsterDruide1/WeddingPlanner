@@ -33,76 +33,21 @@ import java.util.Locale;
 
 import static de.tenolo.weddingplanner.Startseite.prefs;
 
-public class AllgemeineTabelle {
+public class AllgemeineTabelle extends AllgemeineSuperclass {
 
     //0.2f -> FLOAT == GELD-BETRAG -> Summe am Ende ;;;;;; 0.1 -> DOUBLE == NORMALE KOMMA-ZAHL -> keine Summe am Ende
 
-    private Object[] types;
-    private String[] hints;
-    private String listenname;
-    private int anzahlFelder;
-    private String name;
-    private String specials;
     private float[] weights;
     private boolean[] shown;
     private boolean[] editable;
-    private String groupName;
 
-    /*@Override
-    public void onCreate(Bundle bundle) {
-        super.onCreate(bundle);
-        setContentView(R.layout.all_main);
+    AllgemeineTabelle(AllgemeinesObject object, final Context context, final Activity activity, RelativeLayout mainLayout){
+        super(object, context);
 
-        Methoden methoden = new Methoden();
-        methoden.onCreateFillIn(this,getIntent().getStringExtra("navID"),R.layout.gaesteliste);
-
-        new AllgemeineTabelle(getIntent(),this,(findViewById(R.id.liste_add)),(RelativeLayout) findViewById(R.id.gaesteliste_main));
-    }*/
-
-    public AllgemeineTabelle(AllgemeinesObject object, final Context context, final Activity activity, View listeAdd, RelativeLayout mainLayout){
-        try {
-            String typesExtra = object.types;
-            JSONArray typesArray = (new JSONArray(typesExtra));
-            types = new Object[typesArray.length()];
-            for(int i=0;i<types.length;i++){
-                Object type = typesArray.get(i);
-                try {
-                    float number = Float.parseFloat(type.toString());
-                    if(number==0f){
-                        types[i]=0;
-                    }
-                    else if(number==0.1f) {
-                        types[i]=0.1;
-                    }
-                    else if(number==0.2f){
-                        types[i]=(float)0.2;
-                    }
-                }
-                catch (NumberFormatException e){
-                    types[i] = type;
-                }
-            }
-        }
-        catch (JSONException e){
-            e.printStackTrace();
-            return;
-        }
-
-        hints = object.hints;
-        listenname = object.listenname;
-        anzahlFelder = object.anzahlFelder;
-        name = object.name;
-        specials = object.specials;
         weights = object.weights;
         editable = object.editable;
         shown = object.shown;
-        groupName = object.groupName;
 
-        prefs = context.getSharedPreferences("Prefs", Context.MODE_PRIVATE);
-
-        /*if(specials.contains(" disableNew=true ")){
-            listeAdd.setVisibility(View.INVISIBLE);
-        }*/
         if(!specials.contains(" disableNew=true ")){
             FloatingActionButton button = new FloatingActionButton(context);
             button.setOnClickListener(new View.OnClickListener() {
@@ -127,33 +72,16 @@ public class AllgemeineTabelle {
         generateLayout(context, activity, mainLayout);
     }
 
-    public AllgemeineTabelle(){}
-
-    private void generateLayout(final Context context, final Activity activity, RelativeLayout mainLayout){
+    void generateLayout(final Context context, final Activity activity, RelativeLayout mainLayout){
         String[][] listold = (loadOrdered(name)!=null) ? (loadOrdered(name)) : new String[0][anzahlFelder];
 
-        final String[][] list = new String[listold.length+1][anzahlFelder];
+        final String[][] list = insertDummy(listold);
 
-        list[0] = new String[anzahlFelder];
-        for(int i=0;i<anzahlFelder;i++){  //DELETING THIS ROW LATER -> Nebeneinander stimmt wieder
-            list[0][i] = "0";
-        }
-
-        for(int ie=0;ie<listold.length;ie++){
-            System.arraycopy(listold[ie], 0, list[ie+1], 0, anzahlFelder);
-        }
-
-        View prevRow = null;
-        float[] sums = new float[anzahlFelder];
-
-        prevRow = makeCaptions(hints,context,weights,mainLayout);
+        View prevRow = makeCaptions(hints,context,weights,mainLayout);
 
         for (int i=0;i<list.length;i++) {
             String[] strings = list[i];
             prevRow = generateNewRow(strings, context, activity, prevRow, weights, false,i,mainLayout);
-
-
-            sums = calcSums(list);
         }
 
         mainLayout.removeViewAt(3); //REMOVING TEMP-ROW, NOT CAPTIONS
@@ -167,62 +95,46 @@ public class AllgemeineTabelle {
         }
 
         if(needsSumRow && listold.length>0) {
-            View divisor = new View(context);
-            divisor.setBackgroundColor(Color.parseColor("#CCCCCC"));
+            float[] sums = calcSums(list);
 
-            RelativeLayout.LayoutParams paramsRel = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 4);
-            paramsRel.addRule(RelativeLayout.BELOW, prevRow.getId());
-
-            mainLayout.addView(divisor, paramsRel);
-
-            divisor.setId(View.generateViewId());
-            prevRow = divisor;
-
-
-            NumberFormat df = NumberFormat.getNumberInstance(Locale.UK);
-            df.setMinimumFractionDigits(2);
-            df.setMaximumFractionDigits(2);
-            df.setGroupingUsed(false);
-
-            String[] row = new String[anzahlFelder];
-
-            for(int i=0;i<row.length;i++){
-                if(types[i].getClass().toString().equals("class java.lang.Float")){
-                    row[i]=df.format(sums[i]);
-                }
-                else {
-                    row[i]="";
-                }
-            }
-
-            generateNewRow(row,context,activity, prevRow,weights,true,1,mainLayout);
+            prevRow = insertSumRow(context, mainLayout, prevRow, activity, sums);
         }
     }
 
-    private View makeCaptions(final String[] hints, final Context context, float[] weights, RelativeLayout mainLayout){
-        RelativeLayout.LayoutParams mainParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT,RelativeLayout.LayoutParams.WRAP_CONTENT);
+    private View insertSumRow(Context context, RelativeLayout mainLayout, View prevRow, Activity activity, float[] sums){
+        View divisor = new View(context);
+        divisor.setBackgroundColor(Color.parseColor("#CCCCCC"));
 
-        TextView tv = new TextView(context);
-        if(!groupName.equals("")) {
-            tv.setText(groupName);
+        RelativeLayout.LayoutParams paramsRel = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 4);
+        paramsRel.addRule(RelativeLayout.BELOW, prevRow.getId());
+
+        mainLayout.addView(divisor, paramsRel);
+
+        divisor.setId(View.generateViewId());
+        prevRow = divisor;
+
+
+        NumberFormat df = NumberFormat.getNumberInstance(Locale.UK);
+        df.setMinimumFractionDigits(2);
+        df.setMaximumFractionDigits(2);
+        df.setGroupingUsed(false);
+
+        String[] row = new String[anzahlFelder];
+
+        for(int i=0;i<row.length;i++){
+            if(types[i].getClass().toString().equals("class java.lang.Float")){
+                row[i]=df.format(sums[i]);
+            }
+            else {
+                row[i]="";
+            }
         }
-        tv.setTextSize(25);
-        tv.setGravity(Gravity.CENTER);
-        tv.setId(View.generateViewId());
-        mainParams.setMargins(10,10,10,0);
-        mainLayout.addView(tv,mainParams);
 
-        mainParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT,RelativeLayout.LayoutParams.WRAP_CONTENT);
+        return generateNewRow(row,context,activity, prevRow,weights,true,1,mainLayout);
+    }
 
-        TextView t = new TextView(context);
-        t.setText(listenname );
-        t.setTextSize(20);
-        t.setGravity(Gravity.CENTER);
-        t.setId(View.generateViewId());
-        mainParams.setMargins(10,10,10,10);
-        mainParams.addRule(RelativeLayout.BELOW,tv.getId());
-        mainLayout.addView(t,mainParams);
-
+    private View makeCaptions(final String[] hints, final Context context, float[] weights, RelativeLayout mainLayout){
+        View t = super.makeBigCaptions(context, mainLayout);
 
         LinearLayout layout = new LinearLayout(context);
 
@@ -240,7 +152,7 @@ public class AllgemeineTabelle {
         }
 
 
-        mainParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT,RelativeLayout.LayoutParams.WRAP_CONTENT);
+        RelativeLayout.LayoutParams mainParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT,RelativeLayout.LayoutParams.WRAP_CONTENT);
         mainParams.addRule(RelativeLayout.BELOW,t.getId());
         mainLayout.addView(layout,mainParams);
 
@@ -255,8 +167,7 @@ public class AllgemeineTabelle {
             for (String[] strings : list) {
                 try {
                     sums[i] += Float.parseFloat(strings[i]);
-                } catch (NumberFormatException ignored) {
-                }
+                } catch (NumberFormatException ignored) {}
             }
         }
         return sums;
@@ -603,7 +514,7 @@ public class AllgemeineTabelle {
         builder.show();
     }
 
-    public void listeAdd(View view, Context context, Activity activity){
+    private void listeAdd(View view, Context context, Activity activity){
         showDialog(context, activity, false,null, (RelativeLayout) view.getParent());
     }
 
@@ -637,6 +548,21 @@ public class AllgemeineTabelle {
             jsonarray.put(new JSONArray(Arrays.asList(partArray)));
         }
         prefs.edit().putString(name,jsonarray.toString()).apply();
+    }
+
+    private String[][] insertDummy(String[][] listold){
+        final String[][] list = new String[listold.length+1][anzahlFelder];
+
+        list[0] = new String[anzahlFelder];
+        for(int i=0;i<anzahlFelder;i++){  //DELETING THIS ROW LATER -> Nebeneinander stimmt wieder
+            list[0][i] = "0";
+        }
+
+        for(int ie=0;ie<listold.length;ie++){
+            System.arraycopy(listold[ie], 0, list[ie+1], 0, anzahlFelder);
+        }
+
+        return list;
     }
 
 }

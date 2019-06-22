@@ -35,99 +35,18 @@ import java.util.Locale;
 
 import static de.tenolo.weddingplanner.Startseite.prefs;
 
-public class AllgemeineListe extends AppCompatActivity {
+public class AllgemeineListe extends AllgemeineSuperclass {
 
-    //private RelativeLayout mainLayout;
     //0.2f -> FLOAT == GELD-BETRAG -> Summe am Ende ;;;;;; 0.1 -> DOUBLE == NORMALE KOMMA-ZAHL -> keine Summe am Ende
 
-    private Object[] types;
-    private String[] hints;
-    private String listenname;
-    private int anzahlFelder;
-    private String name;
-    private String specials;
-    private String groupName;
 
-    /*@Override
-    public void onCreate(Bundle bundle) {
-        super.onCreate(bundle);
-        setContentView(R.layout.all_main);
-
-        Methoden methoden = new Methoden();
-        methoden.onCreateFillIn(this,getIntent().getStringExtra("navID"),R.layout.gaesteliste);
-
-        new AllgemeineListe(getIntent(),this,(findViewById(R.id.liste_add)),(RelativeLayout) findViewById(R.id.gaesteliste_main));
-    }*/
-
-    public AllgemeineListe(AllgemeinesObject object, Context context, Activity activity, final View listeAdd, RelativeLayout mainLayout){
-        try {
-            String typesExtra = object.types;
-            JSONArray typesArray = (new JSONArray(typesExtra));
-            types = new Object[typesArray.length()];
-            for(int i=0;i<types.length;i++){
-                Object type = typesArray.get(i);
-                try {
-                    float number = Float.parseFloat(type.toString());
-                    if(number==0f){
-                        types[i]=0;
-                    }
-                    else if(number==0.1f) {
-                        types[i]=0.1;
-                    }
-                    else if(number==0.2f){
-                        types[i]=0.2f;
-                    }
-                }
-                catch (NumberFormatException e){
-                    types[i] = type;
-                }
-            }
-        }
-        catch (JSONException e){
-            e.printStackTrace();
-            return;
-        }
-
-        hints = object.hints;
-        listenname = object.listenname;
-        anzahlFelder = object.anzahlFelder;
-        name = object.name;
-        specials = object.specials;
-        groupName = object.groupName;
-
-        prefs = context.getSharedPreferences("Prefs",MODE_PRIVATE);
-
-        /*if(specials.contains(" disableNew=true ")){
-            listeAdd.setVisibility(View.INVISIBLE);
-        }*/
-        if(!specials.contains(" disableNew=true ")){
-            FloatingActionButton button = new FloatingActionButton(context);
-            button.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    listeAdd(v);
-                }
-            });
-            button.setImageResource(R.drawable.round_plus_one_black_36);
-
-            RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-            params.setMargins(16,16,16,16);
-            params.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
-            params.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
-            params.addRule(RelativeLayout.ALIGN_PARENT_END);
-
-            button.setLayoutParams(params);
-
-            mainLayout.addView(button);
-        }
-
+    public AllgemeineListe(AllgemeinesObject object, Context context, Activity activity, RelativeLayout mainLayout){
+        super(object, context);
 
         generateLayout(context,activity,mainLayout);
     }
 
-    public AllgemeineListe(){}
-
-    private void generateLayout(final Context context, final Activity activity, RelativeLayout mainLayout){
+    void generateLayout(final Context context, final Activity activity, RelativeLayout mainLayout){
         String[] list = (loadOrdered(name)!=null) ? (loadOrdered(name)) : new String[0];
         System.out.println(Arrays.deepToString(list));
 
@@ -145,30 +64,7 @@ public class AllgemeineListe extends AppCompatActivity {
     }
 
     private View makeCaptions(final Context context, RelativeLayout mainLayout){
-        RelativeLayout.LayoutParams mainParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT,RelativeLayout.LayoutParams.WRAP_CONTENT);
-
-        TextView tv = new TextView(context);
-        if(!groupName.equals("")) {
-            tv.setText(groupName);
-        }
-        tv.setTextSize(25);
-        tv.setGravity(Gravity.CENTER);
-        tv.setId(View.generateViewId());
-        mainParams.setMargins(10,10,10,0);
-        mainLayout.addView(tv,mainParams);
-
-        mainParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT,RelativeLayout.LayoutParams.WRAP_CONTENT);
-
-        TextView t = new TextView(context);
-        t.setText(listenname );
-        t.setTextSize(20);
-        t.setGravity(Gravity.CENTER);
-        t.setId(View.generateViewId());
-        mainParams.setMargins(10,10,10,10);
-        mainParams.addRule(RelativeLayout.BELOW,tv.getId());
-        mainLayout.addView(t,mainParams);
-
-        return t;
+        return super.makeBigCaptions(context,mainLayout);
     }
 
     private View generateNewRow(final String entry, final Activity activity, final Context context, View prevRow, final int i, final RelativeLayout mainLayout){
@@ -204,6 +100,7 @@ public class AllgemeineListe extends AppCompatActivity {
                     layout.addView(currentGrund, params);
                 }
                 else {
+                    System.out.println(Arrays.deepToString(types));
                     if (types[i2].getClass().toString().equals("class java.lang.Float")) {
                         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                         params.leftMargin = 50;
@@ -340,24 +237,6 @@ public class AllgemeineListe extends AppCompatActivity {
         saveOrdered(list,name);
     }
 
-    private void remove(String oldEntry){
-        String[] listOld = (loadOrdered(name)!=null) ? (loadOrdered(name)) : new String[0];
-        String[] listNew = new String[listOld.length-1];
-
-        int substract = 0;
-
-        for(int ie=0;ie<listOld.length;ie++){
-            if(!(listOld[ie].equals(oldEntry))){
-                listNew[ie+substract]=listOld[ie];
-            }
-            else {
-                substract--;
-            }
-        }
-
-        saveOrdered(listNew,name);
-    }
-
     private void showDialog(final Context context, final Activity activity, final String oldEntry, final int ie, final RelativeLayout mainLayout){
         boolean overrideOld=true;
         if(oldEntry.equals("")){
@@ -431,7 +310,7 @@ public class AllgemeineListe extends AppCompatActivity {
                                         obj.wait();
                                     }
                                     final String date = newFragment.day+"."+ newFragment.month+"."+ newFragment.year;
-                                    runOnUiThread(new Runnable() {
+                                    activity.runOnUiThread(new Runnable() {
                                         @Override
                                         public void run() {
                                             aktuell.setText(date);
@@ -574,11 +453,6 @@ public class AllgemeineListe extends AppCompatActivity {
         builder.show();
     }
 
-    public void listeAdd(View view){
-        //showDialog(this,false,null,0);
-    }
-
-
     private String[] loadOrdered(String name){
         try {
             int count = 0;
@@ -601,7 +475,7 @@ public class AllgemeineListe extends AppCompatActivity {
         }
     }
 
-    static void saveOrdered(String[] array, String name){
+    private void saveOrdered(String[] array, String name){
         JSONArray jsonarray = new JSONArray();
         for(String s : array){
             jsonarray.put(s);

@@ -38,19 +38,15 @@ public class AllgemeineSeite extends AppCompatActivity {
             prevRow = new RelativeLayout(this);
             switch (type){
                 case "AllgemeineListe":
-                    new AllgemeineListe(parcelable,this,this,(findViewById(R.id.liste_add)),prevRow);
+                    new AllgemeineListe(parcelable,this,this,prevRow);
                     break;
                 case "AllgemeineTabelle":
-                    new AllgemeineTabelle(parcelable,this,this,(findViewById(R.id.liste_add)),prevRow);
+                    new AllgemeineTabelle(parcelable,this,this,prevRow);
                     break;
             }
             layout.addView(prevRow,params);
             prevRow.setId(View.generateViewId());
         }
-
-    }
-
-    public void listeAdd(View view){
 
     }
 
