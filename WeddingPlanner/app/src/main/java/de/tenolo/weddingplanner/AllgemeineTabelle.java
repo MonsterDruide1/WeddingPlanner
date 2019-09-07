@@ -3,14 +3,13 @@ package de.tenolo.weddingplanner;
 import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
-import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.v4.app.FragmentActivity;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
+
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import androidx.fragment.app.FragmentActivity;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
 import android.text.InputType;
 import android.view.Gravity;
 import android.view.View;
@@ -30,8 +29,6 @@ import org.json.JSONException;
 import java.text.NumberFormat;
 import java.util.Arrays;
 import java.util.Locale;
-
-import static de.tenolo.weddingplanner.Startseite.prefs;
 
 public class AllgemeineTabelle extends AllgemeineSuperclass {
 

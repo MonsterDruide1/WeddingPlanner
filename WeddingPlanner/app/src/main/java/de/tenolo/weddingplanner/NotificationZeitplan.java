@@ -9,8 +9,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Build;
-import android.support.v4.app.NotificationCompat;
-import android.support.v4.app.NotificationManagerCompat;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 
 import org.joda.time.DateTime;
 import org.joda.time.Days;
@@ -32,90 +32,92 @@ public class NotificationZeitplan extends BroadcastReceiver {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                String text;
-
                 SharedPreferences prefs = context.getSharedPreferences("Prefs", MODE_PRIVATE);
 
-                //FIXME Find out/write TEXT
+                if(prefs.getString("dateHochzeit",null)!=null){
 
-                String[][] listAll = loadOrdered("zeitplan",2,prefs);
+                    //FIXME Find out/write TEXT
 
-                String[][] listAllImportant = null;
-                listAllImportant = getImportantPart(listAll,prefs.getString("dateHochzeit",""));
+                    String[][] listAll = loadOrdered("zeitplan",2,prefs);
 
-                if(listAllImportant==null){
-                    return;
+                    String[][] listAllImportant = null;
+                    listAllImportant = getImportantPart(listAll,prefs.getString("dateHochzeit",""));
+
+                    if(listAllImportant==null){
+                        return;
+                    }
+
+                    String[][] list = onlyUnfinished(listAllImportant);
+
+                    System.out.println(Arrays.deepToString(list));
+
+                    String text;
+                    text="Du hast für diesen Zeitraum noch "+list.length+" Aufgaben, um deine Hochzeit entspannt zu planen!";
+
+
+
+
+
+                    Object[] types = new Object[]{false,""};
+                    String[] hints = new String[]{"",""};
+                    boolean[] editable = new boolean[]{true,false};
+                    boolean[] shown = new boolean[]{true,true};
+                    String listenname = "Zeitplan";
+                    int anzahlFelder = 2;
+                    String name = "zeitplan";
+                    String specials = " disableNew=true disableEdit=true saveOnCheckbox=true ";
+                    float[] weights = new float[]{0.2f,1f};
+
+                    Intent intent = new Intent(context, AllgemeineTabelle.class);
+
+                    JSONArray typesArray = new JSONArray();
+                    for(Object o : types){
+                        typesArray.put(o);
+                    }
+
+                    intent.putExtra("types",typesArray.toString());
+                    intent.putExtra("hints",hints);
+                    intent.putExtra("listenname",listenname);
+                    intent.putExtra("anzahlFelder",anzahlFelder);
+                    intent.putExtra("name",name);
+                    intent.putExtra("specials",specials);
+                    intent.putExtra("weights",weights);
+                    intent.putExtra("editable",editable);
+                    intent.putExtra("shown",shown);
+
+                    intent.putExtra("navNr",5);
+                    intent.putExtra("navID","Zeitplan");
+
+
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    PendingIntent onOpen = PendingIntent.getActivity(context,0,intent,0);
+                    if(Build.VERSION.SDK_INT>=26){
+                        NotificationManager mNotificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+
+                        NotificationChannel mChannel = new NotificationChannel("zeitplan_notification_weddingplanner", "NOTIFICATION-CHANNEL-TITLE", NotificationManager.IMPORTANCE_DEFAULT);
+
+                        mChannel.setDescription("NOTIFICATION-CHANNEL-DESCRIPTION");
+
+                        mChannel.enableLights(true);
+                        mChannel.setLightColor(Color.RED);
+
+                        mChannel.enableVibration(true);
+                        mChannel.setVibrationPattern(new long[]{100, 200, 300, 400, 500, 400, 300, 200, 400});
+
+                        mNotificationManager.createNotificationChannel(mChannel);
+                    }
+
+                    NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(context,NotificationCompat.CATEGORY_REMINDER).setSmallIcon(R.mipmap.logo_quadratisch);
+
+                    mBuilder.setContentTitle("NOTIFICATION-TEST");
+                    mBuilder.setContentText(text);
+                    mBuilder.setChannelId("zeitplan_notification_weddingplanner");
+
+                    mBuilder.setPriority(NotificationCompat.PRIORITY_DEFAULT).setStyle(new NotificationCompat.BigTextStyle().bigText(text));
+                    mBuilder.setContentIntent(onOpen).setAutoCancel(true).setCategory(NotificationCompat.CATEGORY_REMINDER).setVisibility(NotificationCompat.VISIBILITY_PUBLIC);
+                    NotificationManagerCompat notificationManager = NotificationManagerCompat.from(context);
+                    notificationManager.notify(0,mBuilder.build());
                 }
-
-                String[][] list = onlyUnfinished(listAllImportant);
-
-                System.out.println(Arrays.deepToString(list));
-
-                text="Du hast für diesen Zeitraum noch "+list.length+" Aufgaben, um deine Hochzeit entspannt zu planen!";
-
-
-
-
-
-                Object[] types = new Object[]{false,""};
-                String[] hints = new String[]{"",""};
-                boolean[] editable = new boolean[]{true,false};
-                boolean[] shown = new boolean[]{true,true};
-                String listenname = "Zeitplan";
-                int anzahlFelder = 2;
-                String name = "zeitplan";
-                String specials = " disableNew=true disableEdit=true saveOnCheckbox=true ";
-                float[] weights = new float[]{0.2f,1f};
-
-                Intent intent = new Intent(context, AllgemeineTabelle.class);
-
-                JSONArray typesArray = new JSONArray();
-                for(Object o : types){
-                    typesArray.put(o);
-                }
-
-                intent.putExtra("types",typesArray.toString());
-                intent.putExtra("hints",hints);
-                intent.putExtra("listenname",listenname);
-                intent.putExtra("anzahlFelder",anzahlFelder);
-                intent.putExtra("name",name);
-                intent.putExtra("specials",specials);
-                intent.putExtra("weights",weights);
-                intent.putExtra("editable",editable);
-                intent.putExtra("shown",shown);
-
-                intent.putExtra("navNr",5);
-                intent.putExtra("navID","Zeitplan");
-
-
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                PendingIntent onOpen = PendingIntent.getActivity(context,0,intent,0);
-                if(Build.VERSION.SDK_INT>=26){
-                    NotificationManager mNotificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-
-                    NotificationChannel mChannel = new NotificationChannel("zeitplan_notification_weddingplanner", "NOTIFICATION-CHANNEL-TITLE", NotificationManager.IMPORTANCE_DEFAULT);
-
-                    mChannel.setDescription("NOTIFICATION-CHANNEL-DESCRIPTION");
-
-                    mChannel.enableLights(true);
-                    mChannel.setLightColor(Color.RED);
-
-                    mChannel.enableVibration(true);
-                    mChannel.setVibrationPattern(new long[]{100, 200, 300, 400, 500, 400, 300, 200, 400});
-
-                    mNotificationManager.createNotificationChannel(mChannel);
-                }
-
-                NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(context,NotificationCompat.CATEGORY_REMINDER).setSmallIcon(R.mipmap.logo_quadratisch);
-
-                mBuilder.setContentTitle("NOTIFICATION-TEST");
-                mBuilder.setContentText(text);
-                mBuilder.setChannelId("zeitplan_notification_weddingplanner");
-
-                mBuilder.setPriority(NotificationCompat.PRIORITY_DEFAULT).setStyle(new NotificationCompat.BigTextStyle().bigText(text));
-                mBuilder.setContentIntent(onOpen).setAutoCancel(true).setCategory(NotificationCompat.CATEGORY_REMINDER).setVisibility(NotificationCompat.VISIBILITY_PUBLIC);
-                NotificationManagerCompat notificationManager = NotificationManagerCompat.from(context);
-                notificationManager.notify(0,mBuilder.build());
             }
         }).start();
 

@@ -12,7 +12,7 @@
 
     </ScrollView>
 
-    <android.support.design.widget.FloatingActionButton
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/liste_add"
         android:onClick="listeAdd"
         android:layout_width="wrap_content"
