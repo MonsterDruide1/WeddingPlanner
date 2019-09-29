@@ -25,7 +25,7 @@ import java.util.Map;
 
 class Methoden {
 
-    DrawerLayout drawerLayout;
+    private DrawerLayout drawerLayout;
     private String currentNav;
     private int currentGroupPos=0;
     private Map<String,List<String>> expandableListData;
@@ -74,7 +74,6 @@ class Methoden {
     }
 
     private void onNavigationItemSelectedFillIn(String selectedItem, int groupPosition,Activity currentActivity){
-        System.out.println("POS:"+groupPosition);
         final int PosVIP=0;
         final int PosZeitplan=1;
         final int PosLocation=2;
@@ -88,6 +87,8 @@ class Methoden {
         final int PosSonstiges=10;
         final int PosUeberblick=11;
         final int PosEinstellungen=12;
+
+        boolean found = true;
         switch (groupPosition){
             case PosVIP:
                 switch (selectedItem){
@@ -226,6 +227,8 @@ class Methoden {
                             currentActivity.startActivity(intent);
                         }
                         break;
+                    default:
+                        found=false;
                 }
                 break;
             case PosZeitplan:
@@ -320,6 +323,8 @@ class Methoden {
                             currentActivity.startActivity(intent);
                         }
                         break;
+                    default:
+                        found=false;
                 }
                 break;
             case PosLocation:
@@ -415,7 +420,7 @@ class Methoden {
                             currentActivity.startActivity(intent);
                         }
                         break;
-                        //BESORGUNGEN
+                    //BESORGUNGEN
                     case "Unterhaltungsprogramm":
                         if (!selectedItem.equals(currentNav)) {
                             Intent intent = new Intent(currentActivity, AllgemeineSeite.class);
@@ -448,6 +453,8 @@ class Methoden {
                             currentActivity.startActivity(intent);
                         }
                         break;
+                    default:
+                        found=false;
                     //BudgetÜbersicht
                 }
                 break;
@@ -506,7 +513,41 @@ class Methoden {
                             currentActivity.startActivity(intent);
                         }
                         break;
-                    //FIXME Trauung
+                    case "Trauung":
+                        if (!selectedItem.equals(currentNav)) {
+                            Intent intent = new Intent(currentActivity, AllgemeineSeite.class);
+
+                            Parcelable[] parcels = new Parcelable[1];
+
+                            {
+                                Object[] types = new Object[]{new DatePickerFragment(),"","",0,""};
+                                String[] hints = new String[]{"Trautermin","Uhrzeit","Adresse","Wie viele Personen?","Parkmöglichkeiten"};
+                                String[] captions = new String[]{"Standesamt","Trauzeremonie"};
+                                String listenname = "Trauung";
+                                int anzahlFelder = 2;
+                                String name = "trauung";
+                                String specials = " disableNew=true ";
+                                float[] weights = new float[]{0.5f,1f,1f};
+                                String groupName = expandableListData.keySet().toArray(new String[0])[groupPosition];
+
+                                JSONArray typesArray = new JSONArray();
+                                for(Object o : types){
+                                    typesArray.put(o);
+                                }
+
+                                AllgemeinesObject object = new AllgemeinesObject(typesArray.toString(),hints,captions,listenname,anzahlFelder,name,specials,weights,groupName);
+
+                                parcels[0]=object;
+                            }
+
+                            intent.putExtra("listTypes",new String[]{"AllgemeineMehrspaltigeListe"});
+                            intent.putExtra("parcelables",parcels);
+
+                            intent.putExtra("navID","Trauung");
+
+                            currentActivity.startActivity(intent);
+                        }
+                        break;
                     //BESORGUNGEN
                     case "Hochzeitsfahrzeug Angebote":
                         if (!selectedItem.equals(currentNav)) {
@@ -541,6 +582,8 @@ class Methoden {
                             currentActivity.startActivity(intent);
                         }
                         break;
+                    default:
+                        found=false;
                     //BudgetÜbersicht
                 }
                 break;
@@ -551,7 +594,7 @@ class Methoden {
                             currentActivity.startActivity(new Intent(currentActivity, Gaesteliste.class));
                         }
                         break;
-                    case "Hochzeitsfahrzeug Angebote":
+                    case "Gastgeschenke":
                         if (!selectedItem.equals(currentNav)) {
                             Parcelable[] parcels = new Parcelable[3];
 
@@ -594,7 +637,7 @@ class Methoden {
                             {
                                 Object[] types = new Object[]{0.2f, 0.2f};
                                 String[] hints = new String[]{"Preis pro Gast","Preis Gesamt"};
-                                String listenname = "Gastgeschenke_preis";
+                                String listenname = "Gastgeschenke - Preis";
                                 int anzahlFelder = 2;
                                 String name = "gastgeschenke_preis";
                                 String specials = " disableNew=true ";
@@ -610,10 +653,10 @@ class Methoden {
                             }
 
 
-                            intent.putExtra("listTypes",new String[]{"AllgemeineListe","AllgemeineListe"});
+                            intent.putExtra("listTypes",new String[]{"AllgemeineListe","AllgemeineListe","AllgemeineListe"});
                             intent.putExtra("parcelables",parcels);
 
-                            intent.putExtra("navID","Hochzeitsfahrzeug Angebote");
+                            intent.putExtra("navID","Gastgeschenke");
 
                             currentActivity.startActivity(intent);
                         }
@@ -678,12 +721,14 @@ class Methoden {
                             currentActivity.startActivity(intent);
                         }
                         break;
+                    default:
+                        found=false;
                     //Budgetübersicht
                 }
                 break;
             case PosEssen:
                 switch (selectedItem){
-                    case "Budgetübersicht":
+                    case "Sektempfang / Candybar":
                         if ((!selectedItem.equals(currentNav)) || (!(groupPosition==currentGroupPos))) {
                             Object[] types = new Object[]{"","",0,0.2f,false};
                             String[] hints = new String[]{"Was?","Wer?","Anzahl","€","erledigt?"};
@@ -714,7 +759,7 @@ class Methoden {
                             currentActivity.startActivity(intent);
                         }
                         break;
-                    case "Besorgungen":
+                    case "Wer bringt was mit?":
                         if ((!selectedItem.equals(currentNav))) {
                             Object[] types = new Object[]{"","",""};
                             String[] hints = new String[]{"Was?","Wer?","Kontakt"};
@@ -746,35 +791,155 @@ class Methoden {
                         break;
                     case "Menüplanung":
                         if (!selectedItem.equals(currentNav)) {
-                            Object[] types = new Object[]{"",0,0,0,""};
-                            String[] hints = new String[]{"Wünsche & Ideen","Anzahl der Gäste","davon Kinder","Vegetarier, Veganer","Unverträglichkeiten"};
-                            String listenname = "Menüplanung";
-                            int anzahlFelder = 2;
-                            String name = "menueplanung";
-                            String specials = " disableNew=true ";
-                            String groupName = expandableListData.keySet().toArray(new String[0])[groupPosition];
 
                             Intent intent = new Intent(currentActivity, AllgemeineSeite.class);
+                            Parcelable[] parcels = new Parcelable[7];
 
-                            JSONArray typesArray = new JSONArray();
-                            for(Object o : types){
-                                typesArray.put(o);
+                            {
+                                Object[] types = new Object[]{"",0,0,0,""};
+                                String[] hints = new String[]{"Wünsche & Ideen","Anzahl der Gäste","davon Kinder","Vegetarier, Veganer","Unverträglichkeiten"};
+                                String listenname = "Menüplanung";
+                                int anzahlFelder = 2;
+                                String name = "menueplanung";
+                                String specials = " disableNew=true ";
+                                String groupName = expandableListData.keySet().toArray(new String[0])[groupPosition];
+
+                                JSONArray typesArray = new JSONArray();
+                                for(Object o : types){
+                                    typesArray.put(o);
+                                }
+
+                                AllgemeinesObject object = new AllgemeinesObject(typesArray.toString(),hints,listenname,anzahlFelder,name,specials,groupName);
+
+                                parcels[0]=object;
+                            }
+                            {
+                                Object[] types = new Object[]{"","","",0.2f,"","","",""};
+                                String[] hints = new String[]{"Ansprechpartner","Telefonnummer","Adresse","Preis","Angebot","Verpflegung für DJ etc. bedacht?","Ansprechpartner vor Ort","Preis & Leistung"};
+                                String listenname = "Caterer";
+                                int anzahlFelder = 2;
+                                String name = "caterer";
+                                String specials = " disableNew=true ";
+                                String groupName = expandableListData.keySet().toArray(new String[0])[groupPosition];
+
+                                JSONArray typesArray = new JSONArray();
+                                for(Object o : types){
+                                    typesArray.put(o);
+                                }
+
+                                AllgemeinesObject object = new AllgemeinesObject(typesArray.toString(),hints,listenname,anzahlFelder,name,specials,groupName);
+
+                                parcels[1]=object;
+                            }
+                            {
+                                Object[] types = new Object[]{"","",""};
+                                String[] hints = new String[]{"Variation 1","Variation 2","Variation 3"};
+                                boolean[] editable = new boolean[]{true,true,true};
+                                boolean[] shown = new boolean[]{true,true,true};
+                                float[] weights = new float[]{1f,1f,1f};
+                                String listenname = "Aperitifs";
+                                int anzahlFelder = 3;
+                                String name = "aperitifs";
+                                String specials = "";
+                                String groupName = expandableListData.keySet().toArray(new String[0])[groupPosition];
+
+                                JSONArray typesArray = new JSONArray();
+                                for(Object o : types){
+                                    typesArray.put(o);
+                                }
+
+                                AllgemeinesObject object = new AllgemeinesObject(typesArray.toString(),hints,listenname,anzahlFelder,name,specials,weights,editable,shown,groupName);
+
+                                parcels[2]=object;
+                            }
+                            {
+                                Object[] types = new Object[]{"","",""};
+                                String[] hints = new String[]{"Variation 1","Variation 2","Variation 3"};
+                                boolean[] editable = new boolean[]{true,true,true};
+                                boolean[] shown = new boolean[]{true,true,true};
+                                float[] weights = new float[]{1f,1f,1f};
+                                String listenname = "Hauptspeisen";
+                                int anzahlFelder = 3;
+                                String name = "hauptspeisen";
+                                String specials = "";
+                                String groupName = expandableListData.keySet().toArray(new String[0])[groupPosition];
+
+                                JSONArray typesArray = new JSONArray();
+                                for(Object o : types){
+                                    typesArray.put(o);
+                                }
+
+                                AllgemeinesObject object = new AllgemeinesObject(typesArray.toString(),hints,listenname,anzahlFelder,name,specials,weights,editable,shown,groupName);
+
+                                parcels[3]=object;
+                            }
+                            {
+                                Object[] types = new Object[]{"","",""};
+                                String[] hints = new String[]{"Variation 1","Variation 2","Variation 3"};
+                                boolean[] editable = new boolean[]{true,true,true};
+                                boolean[] shown = new boolean[]{true,true,true};
+                                float[] weights = new float[]{1f,1f,1f};
+                                String listenname = "Desserts";
+                                int anzahlFelder = 3;
+                                String name = "desserts";
+                                String specials = "";
+                                String groupName = expandableListData.keySet().toArray(new String[0])[groupPosition];
+
+                                JSONArray typesArray = new JSONArray();
+                                for(Object o : types){
+                                    typesArray.put(o);
+                                }
+
+                                AllgemeinesObject object = new AllgemeinesObject(typesArray.toString(),hints,listenname,anzahlFelder,name,specials,weights,editable,shown,groupName);
+
+                                parcels[4]=object;
+                            }
+                            {
+                                Object[] types = new Object[]{""};
+                                String[] hints = new String[]{"Mitternachtssnack"};
+                                String listenname = "Mitternachtssnack";
+                                int anzahlFelder = 2;
+                                String name = "mitternachtssnack";
+                                String specials = " disableNew=true ";
+                                String groupName = expandableListData.keySet().toArray(new String[0])[groupPosition];
+
+                                JSONArray typesArray = new JSONArray();
+                                for(Object o : types){
+                                    typesArray.put(o);
+                                }
+
+                                AllgemeinesObject object = new AllgemeinesObject(typesArray.toString(),hints,listenname,anzahlFelder,name,specials,groupName);
+
+                                parcels[5]=object;
+                            }
+                            {
+                                Object[] types = new Object[]{"","",""};
+                                String[] hints = new String[]{"Alkoholfreie Getränke","Alkoholische Getränke","Heißgetränke"};
+                                boolean[] editable = new boolean[]{true,true,true};
+                                boolean[] shown = new boolean[]{true,true,true};
+                                float[] weights = new float[]{1f,1f,1f};
+                                String listenname = "Getränke";
+                                int anzahlFelder = 3;
+                                String name = "getraenke";
+                                String specials = "";
+                                String groupName = expandableListData.keySet().toArray(new String[0])[groupPosition];
+
+                                JSONArray typesArray = new JSONArray();
+                                for(Object o : types){
+                                    typesArray.put(o);
+                                }
+
+                                AllgemeinesObject object = new AllgemeinesObject(typesArray.toString(),hints,listenname,anzahlFelder,name,specials,weights,editable,shown,groupName);
+
+                                parcels[4]=object;
                             }
 
-                            AllgemeinesObject object = new AllgemeinesObject(typesArray.toString(),hints,listenname,anzahlFelder,name,specials,groupName);
-
-                            intent.putExtra("listTypes",new String[]{"AllgemeineListe"});
-                            intent.putExtra("parcelables",new Parcelable[]{object});
+                            intent.putExtra("listTypes",new String[]{"AllgemeineListe","AllgemeineListe","AllgemeineTabelle","AllgemeineTabelle","AllgemeineTabelle"});
+                            intent.putExtra("parcelables",parcels);
 
                             intent.putExtra("navID","Menüplanung");
 
                             currentActivity.startActivity(intent);
-                            //FIXME Caterer
-                            //FIXME Aperitifs
-                            //FIXME Hauptspeisen
-                            //FIXME Desserts
-                            //FIXME Mitternachtssnack
-                            //FIXME Getränke
                         }
                         break;
                     case "Hochzeitstorte":
@@ -827,6 +992,8 @@ class Methoden {
                             currentActivity.startActivity(intent);
                         }
                         break;
+                    default:
+                        found=false;
                 }
                 break;
             case PosErinnerungen:
@@ -953,11 +1120,15 @@ class Methoden {
                             currentActivity.startActivity(intent);
                         }
                         break;
+                    default:
+                        found=false;
                     //FIXME Fotos+Videos
                     //BudgetÜbersicht
                 }
                 break;
 
+            default:
+                found=false;
             //FIXME Rest
         }
         switch (selectedItem) {
@@ -1035,7 +1206,9 @@ class Methoden {
                 }
                 break;
             default:
-                Toast.makeText(currentActivity,"Dieser Bereich existiert noch nicht!",Toast.LENGTH_SHORT).show();
+                if(!found){
+                    Toast.makeText(currentActivity,"Dieser Bereich existiert noch nicht!",Toast.LENGTH_SHORT).show();
+                }
 
         }
 

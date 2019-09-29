@@ -3,9 +3,12 @@ package de.tenolo.weddingplanner;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.util.Arrays;
+
 public class AllgemeinesObject implements Parcelable {
     String types;
     String[] hints;
+    String[] captions;
     String listenname;
     int anzahlFelder;
     String name;
@@ -18,6 +21,7 @@ public class AllgemeinesObject implements Parcelable {
     private AllgemeinesObject(Parcel in) {
         types = in.readString();
         hints = in.createStringArray();
+        captions = in.createStringArray();
         listenname = in.readString();
         anzahlFelder = in.readInt();
         name = in.readString();
@@ -49,6 +53,7 @@ public class AllgemeinesObject implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(types);
         dest.writeStringArray(hints);
+        dest.writeStringArray(captions);
         dest.writeString(listenname);
         dest.writeInt(anzahlFelder);
         dest.writeString(name);
@@ -79,6 +84,23 @@ public class AllgemeinesObject implements Parcelable {
         this.weights = weights;
         this.editable = editable;
         this.shown = shown;
+        this.groupName = groupName;
+    }
+
+    public AllgemeinesObject(String types, String[] hints, String[] captions, String listenname, int anzahlFelder, String name, String specials, float[] weights, String groupName){
+        this.types = types;
+        this.hints = hints;
+
+        String[] realCaptions = new String[captions.length+1];
+        realCaptions[0]="";
+        System.arraycopy(captions, 0, realCaptions, 1, captions.length);
+
+        this.captions = realCaptions;
+        this.listenname = listenname;
+        this.anzahlFelder = anzahlFelder+1;
+        this.name = name;
+        this.specials = specials;
+        this.weights = weights;
         this.groupName = groupName;
     }
 }

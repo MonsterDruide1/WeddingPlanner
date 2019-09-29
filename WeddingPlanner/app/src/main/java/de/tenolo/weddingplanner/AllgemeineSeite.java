@@ -43,6 +43,9 @@ public class AllgemeineSeite extends AppCompatActivity {
                 case "AllgemeineTabelle":
                     new AllgemeineTabelle(parcelable,this,this,prevRow);
                     break;
+                case "AllgemeineMehrspaltigeListe":
+                    new AllgemeineMehrspaltigeListe(parcelable,this,this,prevRow);
+                    break;
             }
             layout.addView(prevRow,params);
             prevRow.setId(View.generateViewId());

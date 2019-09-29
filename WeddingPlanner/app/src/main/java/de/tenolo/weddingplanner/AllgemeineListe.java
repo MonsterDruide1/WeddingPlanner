@@ -41,7 +41,6 @@ public class AllgemeineListe extends AllgemeineSuperclass {
 
     void generateLayout(final Context context, final Activity activity, RelativeLayout mainLayout){
         String[] list = (loadOrdered(name)!=null) ? (loadOrdered(name)) : new String[0];
-        System.out.println(Arrays.deepToString(list));
 
         View prevRow = makeCaptions(context,mainLayout);
 
@@ -93,8 +92,7 @@ public class AllgemeineListe extends AllgemeineSuperclass {
                     layout.addView(currentGrund, params);
                 }
                 else {
-                    System.out.println(Arrays.deepToString(types));
-                    if (types[i2].getClass().toString().equals("class java.lang.Float")) {
+                    if (types[i2-1].getClass().toString().equals("class java.lang.Float")) {
                         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                         params.leftMargin = 50;
                         TextView currentVorstellungPreis = new TextView(context);
@@ -107,7 +105,7 @@ public class AllgemeineListe extends AllgemeineSuperclass {
                         currentVorstellungPreis.setGravity(Gravity.END);
 
                         layout.addView(currentVorstellungPreis, params);
-                    } else if (types[i2].getClass().toString().equals("class java.lang.Double")) {
+                    } else if (types[i2-1].getClass().toString().equals("class java.lang.Double")) {
                         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                         params.leftMargin = 50;
                         TextView currentVorstellungPreis = new TextView(context);
@@ -120,7 +118,7 @@ public class AllgemeineListe extends AllgemeineSuperclass {
                         currentVorstellungPreis.setGravity(Gravity.END);
 
                         layout.addView(currentVorstellungPreis, params);
-                    } else if (types[i2].getClass().toString().equals("class java.lang.Integer")) {
+                    } else if (types[i2-1].getClass().toString().equals("class java.lang.Integer")) {
                         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                         params.leftMargin = 50;
                         TextView currentVorstellungPreis = new TextView(context);
@@ -133,7 +131,7 @@ public class AllgemeineListe extends AllgemeineSuperclass {
                         currentVorstellungPreis.setGravity(Gravity.END);
 
                         layout.addView(currentVorstellungPreis, params);
-                    } else if (types[i2].getClass().toString().equals("class java.lang.String") || types[i2].getClass().toString().equals("class java.util.Date")) {
+                    } else if (types[i2-1].getClass().toString().equals("class java.lang.String") || types[i2-1].getClass().toString().equals("class java.util.Date")) {
                         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT,0);
                         params.leftMargin = 50;
                         params.leftMargin = 10;
@@ -153,7 +151,7 @@ public class AllgemeineListe extends AllgemeineSuperclass {
                         }
 
                         layout.addView(currentGrund, params);
-                    } else if (types[i2].getClass().toString().equals("class java.lang.Boolean")) {
+                    } else if (types[i2-1].getClass().toString().equals("class java.lang.Boolean")) {
 
                         final CheckBox bezahltBox = new CheckBox(context);
 
@@ -463,7 +461,7 @@ public class AllgemeineListe extends AllgemeineSuperclass {
             e.printStackTrace();
             return null;
         } catch (NullPointerException e){
-            e.printStackTrace();
+            System.out.println("No save for "+name+" existing");
             return null;
         }
     }

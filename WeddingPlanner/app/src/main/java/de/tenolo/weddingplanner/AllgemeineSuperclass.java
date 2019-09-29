@@ -11,6 +11,8 @@ import android.widget.TextView;
 import org.json.JSONArray;
 import org.json.JSONException;
 
+import java.util.Arrays;
+
 abstract class AllgemeineSuperclass {
 
     Object[] types;
