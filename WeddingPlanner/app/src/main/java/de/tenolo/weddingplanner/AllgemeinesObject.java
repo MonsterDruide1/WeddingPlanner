@@ -7,6 +7,7 @@ import java.util.Arrays;
 
 public class AllgemeinesObject implements Parcelable {
     String types;
+    boolean verticalTypes;
     String[] hints;
     String[] captions;
     String listenname;
@@ -20,6 +21,7 @@ public class AllgemeinesObject implements Parcelable {
 
     private AllgemeinesObject(Parcel in) {
         types = in.readString();
+        verticalTypes = in.readByte() != 0;
         hints = in.createStringArray();
         captions = in.createStringArray();
         listenname = in.readString();
@@ -52,6 +54,7 @@ public class AllgemeinesObject implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(types);
+        dest.writeByte((byte) (verticalTypes ? 1 : 0));
         dest.writeStringArray(hints);
         dest.writeStringArray(captions);
         dest.writeString(listenname);
@@ -87,8 +90,9 @@ public class AllgemeinesObject implements Parcelable {
         this.groupName = groupName;
     }
 
-    public AllgemeinesObject(String types, String[] hints, String[] captions, String listenname, int anzahlFelder, String name, String specials, float[] weights, String groupName){
+    public AllgemeinesObject(String types, boolean verticalTypes, String[] hints, String[] captions, String listenname, int anzahlFelder, String name, String specials, float[] weights, String groupName){
         this.types = types;
+        this.verticalTypes = verticalTypes;
         this.hints = hints;
 
         String[] realCaptions = new String[captions.length+1];

@@ -19,6 +19,7 @@ import org.json.JSONArray;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -535,7 +536,7 @@ class Methoden {
                                     typesArray.put(o);
                                 }
 
-                                AllgemeinesObject object = new AllgemeinesObject(typesArray.toString(),hints,captions,listenname,anzahlFelder,name,specials,weights,groupName);
+                                AllgemeinesObject object = new AllgemeinesObject(typesArray.toString(),false,hints,captions,listenname,anzahlFelder,name,specials,weights,groupName);
 
                                 parcels[0]=object;
                             }
@@ -1098,7 +1099,6 @@ class Methoden {
                             String listenname = "No-Go Lieder";
                             int anzahlFelder = 2;
                             String name = "no-go_lieder";
-                            System.out.println(name);
                             String specials = "";
                             float[] weights = new float[]{1f,1f};
                             String groupName = expandableListData.keySet().toArray(new String[0])[groupPosition];
@@ -1120,13 +1120,714 @@ class Methoden {
                             currentActivity.startActivity(intent);
                         }
                         break;
+                    case "Fotos":
+                        if (!selectedItem.equals(currentNav)) {
+                            Parcelable[] parcels = new Parcelable[1];
+
+                            Intent intent = new Intent(currentActivity, AllgemeineSeite.class);
+
+                            {
+                                Object[] types = new Object[]{"", "", new DatePickerFragment(), "",""};
+                                String[] hints = new String[]{"Fotograf", "Kontakt", "Termin", "Preis & Leistung", "Mögliche Fragen"};
+                                String listenname = "Fotos";
+                                int anzahlFelder = 2;
+                                String name = "fotos";
+                                String specials = " disableNew=true ";
+                                String groupName = expandableListData.keySet().toArray(new String[0])[groupPosition];
+
+                                JSONArray typesArray = new JSONArray();
+                                for (Object o : types) {
+                                    typesArray.put(o);
+                                }
+                                AllgemeinesObject object = new AllgemeinesObject(typesArray.toString(),hints,listenname,anzahlFelder,name,specials,groupName);
+
+                                parcels[0]=object;
+                            }
+
+
+                            intent.putExtra("listTypes",new String[]{"AllgemeineListe"});
+                            intent.putExtra("parcelables",parcels);
+
+                            intent.putExtra("navID","Fotos");
+
+                            currentActivity.startActivity(intent);
+                        }
+                        break;
+                    case "Videos":
+                        if (!selectedItem.equals(currentNav)) {
+                            Parcelable[] parcels = new Parcelable[1];
+
+                            Intent intent = new Intent(currentActivity, AllgemeineSeite.class);
+
+                            {
+                                Object[] types = new Object[]{"", "", new DatePickerFragment(), "",""};
+                                String[] hints = new String[]{"Videograf", "Kontakt", "Termin", "Preis & Leistung", "Mögliche Fragen"};
+                                String listenname = "Video";
+                                int anzahlFelder = 2;
+                                String name = "video";
+                                String specials = " disableNew=true ";
+                                String groupName = expandableListData.keySet().toArray(new String[0])[groupPosition];
+
+                                JSONArray typesArray = new JSONArray();
+                                for (Object o : types) {
+                                    typesArray.put(o);
+                                }
+                                AllgemeinesObject object = new AllgemeinesObject(typesArray.toString(),hints,listenname,anzahlFelder,name,specials,groupName);
+
+                                parcels[0]=object;
+                            }
+
+
+                            intent.putExtra("listTypes",new String[]{"AllgemeineListe"});
+                            intent.putExtra("parcelables",parcels);
+
+                            intent.putExtra("navID","Videos");
+
+                            currentActivity.startActivity(intent);
+                        }
+                        break;
                     default:
                         found=false;
-                    //FIXME Fotos+Videos
                     //BudgetÜbersicht
                 }
                 break;
+            case PosDressUp:
+                switch (selectedItem){
+                    case "Brauthäuser":
+                        if (!selectedItem.equals(currentNav)) {
+                            Parcelable[] parcels = new Parcelable[3];
 
+                            Intent intent = new Intent(currentActivity, AllgemeineSeite.class);
+
+                            for(int i=1;i<=parcels.length;i++){
+                                Object[] types = new Object[]{"", "", "", new DatePickerFragment()};
+                                String[] hints = new String[]{"Name der Botique", "Adresse", "Kontakt", "Termin"};
+                                String listenname = "Brauthaus "+i;
+                                int anzahlFelder = 2;
+                                String name = "brauthaus_"+i;
+                                String specials = " disableNew=true ";
+                                String groupName = expandableListData.keySet().toArray(new String[0])[groupPosition];
+
+                                JSONArray typesArray = new JSONArray();
+                                for (Object o : types) {
+                                    typesArray.put(o);
+                                }
+                                AllgemeinesObject object = new AllgemeinesObject(typesArray.toString(),hints,listenname,anzahlFelder,name,specials,groupName);
+
+                                parcels[i-1]=object;
+                            }
+
+
+                            intent.putExtra("listTypes",new String[]{"AllgemeineListe","AllgemeineListe","AllgemeineListe"});
+                            intent.putExtra("parcelables",parcels);
+
+                            intent.putExtra("navID","Brauthäuser");
+
+                            currentActivity.startActivity(intent);
+                        }
+                        break;
+                    case "Brautmessen":
+                        if (!selectedItem.equals(currentNav)) {
+                            Parcelable[] parcels = new Parcelable[3];
+
+                            Intent intent = new Intent(currentActivity, AllgemeineSeite.class);
+
+                            for(int i=1;i<=parcels.length;i++){
+                                Object[] types = new Object[]{"", "", "", new DatePickerFragment()};
+                                String[] hints = new String[]{"Name der Messe", "Adresse", "Designer", "Termin"};
+                                String listenname = "Brautmesse "+i;
+                                int anzahlFelder = 2;
+                                String name = "brautmesse_"+i;
+                                String specials = " disableNew=true ";
+                                String groupName = expandableListData.keySet().toArray(new String[0])[groupPosition];
+
+                                JSONArray typesArray = new JSONArray();
+                                for (Object o : types) {
+                                    typesArray.put(o);
+                                }
+                                AllgemeinesObject object = new AllgemeinesObject(typesArray.toString(),hints,listenname,anzahlFelder,name,specials,groupName);
+
+                                parcels[i-1]=object;
+                            }
+
+
+                            intent.putExtra("listTypes",new String[]{"AllgemeineListe","AllgemeineListe","AllgemeineListe"});
+                            intent.putExtra("parcelables",parcels);
+
+                            intent.putExtra("navID","Brautmessen");
+
+                            currentActivity.startActivity(intent);
+                        }
+                        break;
+                    case "Haare & Make-up":
+                        if (!selectedItem.equals(currentNav)) {
+                            Parcelable[] parcels = new Parcelable[2];
+
+                            Intent intent = new Intent(currentActivity, AllgemeineSeite.class);
+
+                            {
+                                Object[] types = new Object[]{"", "", "", 0.2f, new DatePickerFragment(), "", new DatePickerFragment(), ""};
+                                String[] hints = new String[]{"Friseur", "Adresse", "Kontakt", "Kosten", "Probetermin", "Uhrzeit", "Hochzeitstermin", "Uhrzeit"};
+                                String listenname = "Haare";
+                                int anzahlFelder = 2;
+                                String name = "haare";
+                                String specials = " disableNew=true ";
+                                String groupName = expandableListData.keySet().toArray(new String[0])[groupPosition];
+
+                                JSONArray typesArray = new JSONArray();
+                                for (Object o : types) {
+                                    typesArray.put(o);
+                                }
+                                AllgemeinesObject object = new AllgemeinesObject(typesArray.toString(),hints,listenname,anzahlFelder,name,specials,groupName);
+
+                                parcels[0]=object;
+                            }
+                            {
+                                Object[] types = new Object[]{"", "", "", 0.2f, new DatePickerFragment(), "", new DatePickerFragment(), ""};
+                                String[] hints = new String[]{"Stylist", "Adresse", "Kontakt", "Kosten", "Probetermin", "Uhrzeit", "Hochzeitstermin", "Uhrzeit"};
+                                String listenname = "Make-up";
+                                int anzahlFelder = 2;
+                                String name = "makeup";
+                                String specials = " disableNew=true ";
+                                String groupName = expandableListData.keySet().toArray(new String[0])[groupPosition];
+
+                                JSONArray typesArray = new JSONArray();
+                                for (Object o : types) {
+                                    typesArray.put(o);
+                                }
+                                AllgemeinesObject object = new AllgemeinesObject(typesArray.toString(),hints,listenname,anzahlFelder,name,specials,groupName);
+
+                                parcels[1]=object;
+                            }
+
+
+                            intent.putExtra("listTypes",new String[]{"AllgemeineListe","AllgemeineListe"});
+                            intent.putExtra("parcelables",parcels);
+
+                            intent.putExtra("navID","Haare & Make-up");
+
+                            currentActivity.startActivity(intent);
+                        }
+                        break;
+
+                        //TODO Alles beisammen?
+
+                    case "Traditionen & Bräuche":
+                        if ((!selectedItem.equals(currentNav)) || (!(groupPosition==currentGroupPos))) {
+                            Object[] types = new Object[]{"",true};
+                            String[] hints = new String[]{"Brauch","Berücksichtigt?"};
+                            boolean[] editable = new boolean[]{true,true};
+                            boolean[] shown = new boolean[]{true,true};
+                            String listenname = "Traditionen & Bräuche";
+                            int anzahlFelder = 2;
+                            String name = "traditionen_braeuche";
+                            String specials = " saveOnCheckbox=true ";
+                            float[] weights = new float[]{1f,0.3f};
+                            String groupName = expandableListData.keySet().toArray(new String[0])[groupPosition];
+
+                            Intent intent = new Intent(currentActivity, AllgemeineSeite.class);
+
+                            JSONArray typesArray = new JSONArray();
+                            for(Object o : types){
+                                typesArray.put(o);
+                            }
+
+                            AllgemeinesObject object = new AllgemeinesObject(typesArray.toString(),hints,listenname,anzahlFelder,name,specials,weights,editable,shown,groupName);
+
+                            intent.putExtra("listTypes",new String[]{"AllgemeineTabelle"});
+                            intent.putExtra("parcelables",new Parcelable[]{object});
+
+                            intent.putExtra("navID","Traditionen & Bräuche");
+
+                            currentActivity.startActivity(intent);
+                        }
+                        break;
+                    case "Outfits für Trauzeugen, Brautjungfern, Groomsmen":
+                        if (!selectedItem.equals(currentNav)) {
+                            Parcelable[] parcels = new Parcelable[1];
+
+                            Intent intent = new Intent(currentActivity, AllgemeineSeite.class);
+
+                            {
+                                Object[] types = new Object[]{"", "", "",""};
+                                String[] hints = new String[]{"Farbvorstellungen", "Art der Kleider", "Sonstiges", "Notizen"};
+                                String listenname = "Outfits für Trauzeugen, Brautjungfern, Groomsmen";
+                                int anzahlFelder = 2;
+                                String name = "outfits";
+                                String specials = " disableNew=true ";
+                                String groupName = expandableListData.keySet().toArray(new String[0])[groupPosition];
+
+                                JSONArray typesArray = new JSONArray();
+                                for (Object o : types) {
+                                    typesArray.put(o);
+                                }
+                                AllgemeinesObject object = new AllgemeinesObject(typesArray.toString(),hints,listenname,anzahlFelder,name,specials,groupName);
+
+                                parcels[0]=object;
+                            }
+
+
+                            intent.putExtra("listTypes",new String[]{"AllgemeineListe"});
+                            intent.putExtra("parcelables",parcels);
+
+                            intent.putExtra("navID","Outfits für Trauzeugen, Brautjungfern, Groomsmen");
+
+                            currentActivity.startActivity(intent);
+                        }
+                        break;
+                    default:
+                        found=false;
+                        //BudgetÜbersicht
+                }
+                break;
+            case PosDrucke:
+                switch (selectedItem){
+
+                    case "Übersicht":
+                        if (!selectedItem.equals(currentNav)) {
+                            Intent intent = new Intent(currentActivity, AllgemeineSeite.class);
+
+                            Parcelable[] parcels = new Parcelable[1];
+
+                            {
+                                Object[] types = new Object[]{"","",0,0.2f};
+                                String[] hints = new String[]{"Save the Date","Einladung","Programm Trauung","Tischkarten","Menükarten","Danksagungskarten"};
+                                String[] captions = new String[]{"Selbermachen?","Druckerei?","Stückzahl?","€"};
+                                String listenname = "Übersicht";
+                                int anzahlFelder = 4;
+                                String name = "uebersicht_druck";
+                                String specials = " disableNew=true ";
+                                float[] weights = new float[]{2f,1f,1f,1f,1f};
+                                String groupName = expandableListData.keySet().toArray(new String[0])[groupPosition];
+
+                                JSONArray typesArray = new JSONArray();
+                                for(Object o : types){
+                                    typesArray.put(o);
+                                }
+
+                                AllgemeinesObject object = new AllgemeinesObject(typesArray.toString(),true,hints,captions,listenname,anzahlFelder,name,specials,weights,groupName);
+
+                                parcels[0]=object;
+                            }
+
+                            intent.putExtra("listTypes",new String[]{"AllgemeineMehrspaltigeListe"});
+                            intent.putExtra("parcelables",parcels);
+
+                            intent.putExtra("navID","Übersicht");
+
+                            currentActivity.startActivity(intent);
+                        }
+                        break;
+                    case "Druckerei":
+                        if (!selectedItem.equals(currentNav)) {
+                            Parcelable[] parcels = new Parcelable[1];
+
+                            Intent intent = new Intent(currentActivity, AllgemeineSeite.class);
+
+                            {
+                                Object[] types = new Object[]{"", "", "", ""};
+                                String[] hints = new String[]{"Name", "Telefonnummer", "Adresse", "Sonstiges"};
+                                String listenname = "Druckerei";
+                                int anzahlFelder = 2;
+                                String name = "druckerei";
+                                String specials = " disableNew=true ";
+                                String groupName = expandableListData.keySet().toArray(new String[0])[groupPosition];
+
+                                JSONArray typesArray = new JSONArray();
+                                for (Object o : types) {
+                                    typesArray.put(o);
+                                }
+                                AllgemeinesObject object = new AllgemeinesObject(typesArray.toString(),hints,listenname,anzahlFelder,name,specials,groupName);
+
+                                parcels[0]=object;
+                            }
+
+
+                            intent.putExtra("listTypes",new String[]{"AllgemeineListe"});
+                            intent.putExtra("parcelables",parcels);
+
+                            intent.putExtra("navID","Druckerei");
+
+                            currentActivity.startActivity(intent);
+                        }
+                    case "Save the Date":
+                        if (!selectedItem.equals(currentNav)) {
+                            Parcelable[] parcels = new Parcelable[1];
+
+                            Intent intent = new Intent(currentActivity, AllgemeineSeite.class);
+
+                            {
+                                Object[] types = new Object[]{"", new DatePickerFragment()};
+                                String[] hints = new String[]{"Mustertext & Infos", "Versanddatum"};
+                                String listenname = "Save the Date";
+                                int anzahlFelder = 2;
+                                String name = "save_the_date";
+                                String specials = " disableNew=true ";
+                                String groupName = expandableListData.keySet().toArray(new String[0])[groupPosition];
+
+                                JSONArray typesArray = new JSONArray();
+                                for (Object o : types) {
+                                    typesArray.put(o);
+                                }
+                                AllgemeinesObject object = new AllgemeinesObject(typesArray.toString(),hints,listenname,anzahlFelder,name,specials,groupName);
+
+                                parcels[0]=object;
+                            }
+
+
+                            intent.putExtra("listTypes",new String[]{"AllgemeineListe"});
+                            intent.putExtra("parcelables",parcels);
+
+                            intent.putExtra("navID","Save the Date");
+
+                            currentActivity.startActivity(intent);
+                        }
+                    case "Einladungskarten":
+                        if (!selectedItem.equals(currentNav)) {
+                            Parcelable[] parcels = new Parcelable[1];
+
+                            Intent intent = new Intent(currentActivity, AllgemeineSeite.class);
+
+                            {
+                                Object[] types = new Object[]{"", new DatePickerFragment()};
+                                String[] hints = new String[]{"Mustertext & Infos", "Versanddatum"};
+                                String listenname = "Einladungskarten";
+                                int anzahlFelder = 2;
+                                String name = "einladungskarten";
+                                String specials = " disableNew=true ";
+                                String groupName = expandableListData.keySet().toArray(new String[0])[groupPosition];
+
+                                JSONArray typesArray = new JSONArray();
+                                for (Object o : types) {
+                                    typesArray.put(o);
+                                }
+                                AllgemeinesObject object = new AllgemeinesObject(typesArray.toString(),hints,listenname,anzahlFelder,name,specials,groupName);
+
+                                parcels[0]=object;
+                            }
+
+
+                            intent.putExtra("listTypes",new String[]{"AllgemeineListe"});
+                            intent.putExtra("parcelables",parcels);
+
+                            intent.putExtra("navID","Einladungskarten");
+
+                            currentActivity.startActivity(intent);
+                        }
+                    case "Trauspruch":
+                        if (!selectedItem.equals(currentNav)) {
+                            Parcelable[] parcels = new Parcelable[1];
+
+                            Intent intent = new Intent(currentActivity, AllgemeineSeite.class);
+
+                            {
+                                Object[] types = new Object[]{"", new DatePickerFragment()};
+                                String[] hints = new String[]{"Mustertext & Infos", "Versanddatum"};
+                                String listenname = "Trauspruch";
+                                int anzahlFelder = 2;
+                                String name = "trauspruch";
+                                String specials = " disableNew=true ";
+                                String groupName = expandableListData.keySet().toArray(new String[0])[groupPosition];
+
+                                JSONArray typesArray = new JSONArray();
+                                for (Object o : types) {
+                                    typesArray.put(o);
+                                }
+                                AllgemeinesObject object = new AllgemeinesObject(typesArray.toString(),hints,listenname,anzahlFelder,name,specials,groupName);
+
+                                parcels[0]=object;
+                            }
+
+
+                            intent.putExtra("listTypes",new String[]{"AllgemeineListe"});
+                            intent.putExtra("parcelables",parcels);
+
+                            intent.putExtra("navID","Trauspruch");
+
+                            currentActivity.startActivity(intent);
+                        }
+                    case "Kirchenprogramm":
+                        if (!selectedItem.equals(currentNav)) {
+                            Parcelable[] parcels = new Parcelable[1];
+
+                            Intent intent = new Intent(currentActivity, AllgemeineSeite.class);
+
+                            {
+                                Object[] types = new Object[]{"", new DatePickerFragment()};
+                                String[] hints = new String[]{"Mustertext & Infos", "Versanddatum"};
+                                String listenname = "Kirchenprogramm";
+                                int anzahlFelder = 2;
+                                String name = "kirchenprogramm";
+                                String specials = " disableNew=true ";
+                                String groupName = expandableListData.keySet().toArray(new String[0])[groupPosition];
+
+                                JSONArray typesArray = new JSONArray();
+                                for (Object o : types) {
+                                    typesArray.put(o);
+                                }
+                                AllgemeinesObject object = new AllgemeinesObject(typesArray.toString(),hints,listenname,anzahlFelder,name,specials,groupName);
+
+                                parcels[0]=object;
+                            }
+
+
+                            intent.putExtra("listTypes",new String[]{"AllgemeineListe"});
+                            intent.putExtra("parcelables",parcels);
+
+                            intent.putExtra("navID","Kirchenprogramm");
+
+                            currentActivity.startActivity(intent);
+                        }
+                    case "Menükarten":
+                        if (!selectedItem.equals(currentNav)) {
+                            Parcelable[] parcels = new Parcelable[1];
+
+                            Intent intent = new Intent(currentActivity, AllgemeineSeite.class);
+
+                            {
+                                Object[] types = new Object[]{"", "", "", "", new DatePickerFragment()};
+                                String[] hints = new String[]{"Vorspeisen", "Hauptspeisen", "Desserts", "Getränke", "Erledigungsdatum"};
+                                String listenname = "Menükarten";
+                                int anzahlFelder = 2;
+                                String name = "menuekarten";
+                                String specials = " disableNew=true ";
+                                String groupName = expandableListData.keySet().toArray(new String[0])[groupPosition];
+
+                                JSONArray typesArray = new JSONArray();
+                                for (Object o : types) {
+                                    typesArray.put(o);
+                                }
+                                AllgemeinesObject object = new AllgemeinesObject(typesArray.toString(),hints,listenname,anzahlFelder,name,specials,groupName);
+
+                                parcels[0]=object;
+                            }
+
+
+                            intent.putExtra("listTypes",new String[]{"AllgemeineListe"});
+                            intent.putExtra("parcelables",parcels);
+
+                            intent.putExtra("navID","Menükarten");
+
+                            currentActivity.startActivity(intent);
+                        }
+                    case "Danksagungen":
+                        if (!selectedItem.equals(currentNav)) {
+                            Parcelable[] parcels = new Parcelable[1];
+
+                            Intent intent = new Intent(currentActivity, AllgemeineSeite.class);
+
+                            {
+                                Object[] types = new Object[]{"", new DatePickerFragment()};
+                                String[] hints = new String[]{"Mustertext & Infos", "Versanddatum"};
+                                String listenname = "Danksagungen";
+                                int anzahlFelder = 2;
+                                String name = "danksagungen";
+                                String specials = " disableNew=true ";
+                                String groupName = expandableListData.keySet().toArray(new String[0])[groupPosition];
+
+                                JSONArray typesArray = new JSONArray();
+                                for (Object o : types) {
+                                    typesArray.put(o);
+                                }
+                                AllgemeinesObject object = new AllgemeinesObject(typesArray.toString(),hints,listenname,anzahlFelder,name,specials,groupName);
+
+                                parcels[0]=object;
+                            }
+
+
+                            intent.putExtra("listTypes",new String[]{"AllgemeineListe"});
+                            intent.putExtra("parcelables",parcels);
+
+                            intent.putExtra("navID","Danksagungen");
+
+                            currentActivity.startActivity(intent);
+                        }
+                    case "Sonstige":
+                        if (!selectedItem.equals(currentNav)) {
+                            Parcelable[] parcels = new Parcelable[1];
+
+                            Intent intent = new Intent(currentActivity, AllgemeineSeite.class);
+
+                            {
+                                Object[] types = new Object[]{"", new DatePickerFragment()};
+                                String[] hints = new String[]{"Mustertext & Infos", "Versanddatum"};
+                                String listenname = "Sonstige";
+                                int anzahlFelder = 2;
+                                String name = "sonstige";
+                                String specials = " disableNew=true ";
+                                String groupName = expandableListData.keySet().toArray(new String[0])[groupPosition];
+
+                                JSONArray typesArray = new JSONArray();
+                                for (Object o : types) {
+                                    typesArray.put(o);
+                                }
+                                AllgemeinesObject object = new AllgemeinesObject(typesArray.toString(),hints,listenname,anzahlFelder,name,specials,groupName);
+
+                                parcels[0]=object;
+                            }
+
+
+                            intent.putExtra("listTypes",new String[]{"AllgemeineListe"});
+                            intent.putExtra("parcelables",parcels);
+
+                            intent.putExtra("navID","Sonstige");
+
+                            currentActivity.startActivity(intent);
+                        }
+                    default:
+                            found=false;
+                }
+                break;
+            case PosFlowerpower:
+                switch (selectedItem){
+
+                    case "Übersicht":
+                        if (!selectedItem.equals(currentNav)) {
+                            Intent intent = new Intent(currentActivity, AllgemeineSeite.class);
+
+                            Parcelable[] parcels = new Parcelable[1];
+
+                            {
+                                Object[] types = new Object[]{"",0,0.2f};
+                                String[] hints = new String[]{"Brautstrauß","Blumen für Trauung","Blumen für Party","Tischbouquets","Sonstiges"};
+                                String[] captions = new String[]{"Art","Stückzahl","€"};
+                                String listenname = "Übersicht";
+                                int anzahlFelder = 3;
+                                String name = "uebersicht_flower";
+                                String specials = " disableNew=true ";
+                                float[] weights = new float[]{1.5f,2f,1f,1f};
+                                String groupName = expandableListData.keySet().toArray(new String[0])[groupPosition];
+
+                                JSONArray typesArray = new JSONArray();
+                                for(Object o : types){
+                                    typesArray.put(o);
+                                }
+
+                                AllgemeinesObject object = new AllgemeinesObject(typesArray.toString(),true,hints,captions,listenname,anzahlFelder,name,specials,weights,groupName);
+
+                                parcels[0]=object;
+                            }
+
+                            intent.putExtra("listTypes",new String[]{"AllgemeineMehrspaltigeListe"});
+                            intent.putExtra("parcelables",parcels);
+
+                            intent.putExtra("navID","Übersicht");
+
+                            currentActivity.startActivity(intent);
+                        }
+                        break;
+                    case "Florist":
+                        if (!selectedItem.equals(currentNav)) {
+                            Parcelable[] parcels = new Parcelable[1];
+
+                            Intent intent = new Intent(currentActivity, AllgemeineSeite.class);
+
+                            {
+                                Object[] types = new Object[]{"", "", "", ""};
+                                String[] hints = new String[]{"Name", "Telefonnummer", "Adresse", "Sonstiges"};
+                                String listenname = "Florist";
+                                int anzahlFelder = 2;
+                                String name = "florist";
+                                String specials = " disableNew=true ";
+                                String groupName = expandableListData.keySet().toArray(new String[0])[groupPosition];
+
+                                JSONArray typesArray = new JSONArray();
+                                for (Object o : types) {
+                                    typesArray.put(o);
+                                }
+                                AllgemeinesObject object = new AllgemeinesObject(typesArray.toString(),hints,listenname,anzahlFelder,name,specials,groupName);
+
+                                parcels[0]=object;
+                            }
+
+
+                            intent.putExtra("listTypes",new String[]{"AllgemeineListe"});
+                            intent.putExtra("parcelables",parcels);
+
+                            intent.putExtra("navID","Florist");
+
+                            currentActivity.startActivity(intent);
+                        }
+                        break;
+                    default:
+                        found=false;
+                }
+                break;
+
+            case PosSonstiges:
+                switch (selectedItem) {
+
+                    case "Geliehenes zurückgeben":
+                        if (!selectedItem.equals(currentNav)) {
+                            Intent intent = new Intent(currentActivity, AllgemeineSeite.class);
+
+                            Parcelable[] parcels = new Parcelable[1];
+
+                            {
+                                Object[] types = new Object[]{"",""};
+                                String[] hints = new String[]{"Was?","Von wem?"};
+                                boolean[] editable = new boolean[]{true,true};
+                                boolean[] shown = new boolean[]{true,true};
+                                String listenname = "Geliehenes zurückgeben";
+                                int anzahlFelder = 2;
+                                String name = "geliehenes_zurueckgeben";
+                                String specials = "";
+                                float[] weights = new float[]{1f,1f};
+                                String groupName = expandableListData.keySet().toArray(new String[0])[groupPosition];
+
+                                JSONArray typesArray = new JSONArray();
+                                for(Object o : types){
+                                    typesArray.put(o);
+                                }
+
+                                AllgemeinesObject object = new AllgemeinesObject(typesArray.toString(),hints,listenname,anzahlFelder,name,specials,weights,editable,shown,groupName);
+
+                                parcels[0]=object;
+                            }
+
+                            intent.putExtra("listTypes",new String[]{"AllgemeineTabelle"});
+                            intent.putExtra("parcelables",parcels);
+
+                            intent.putExtra("navID","Geliehenes zurückgeben");
+
+                            currentActivity.startActivity(intent);
+                        }
+                        break;
+                    case "Notizen/Sonstiges":
+                        if (!selectedItem.equals(currentNav)) {
+                            Parcelable[] parcels = new Parcelable[1];
+
+                            Intent intent = new Intent(currentActivity, AllgemeineSeite.class);
+
+                            {
+                                Object[] types = new Object[]{""};
+                                String[] hints = new String[]{"Notizen/Sonstiges"};
+                                String listenname = "Notizen/Sonstiges";
+                                int anzahlFelder = 2;
+                                String name = "notizen_sonstiges";
+                                String specials = " disableNew=true ";
+                                String groupName = expandableListData.keySet().toArray(new String[0])[groupPosition];
+
+                                JSONArray typesArray = new JSONArray();
+                                for (Object o : types) {
+                                    typesArray.put(o);
+                                }
+                                AllgemeinesObject object = new AllgemeinesObject(typesArray.toString(),hints,listenname,anzahlFelder,name,specials,groupName);
+
+                                parcels[0]=object;
+                            }
+
+
+                            intent.putExtra("listTypes",new String[]{"AllgemeineListe"});
+                            intent.putExtra("parcelables",parcels);
+
+                            intent.putExtra("navID","Notizen/Sonstiges");
+
+                            currentActivity.startActivity(intent);
+                        }
+                        break;
+                }
+                break;
             default:
                 found=false;
             //FIXME Rest
@@ -1228,8 +1929,8 @@ class Methoden {
         List<String> essenTrinken = Arrays.asList("Sektempfang / Candybar","Wer bringt was mit?","Menüplanung","Hochzeitstorte","Budgetübersicht");
         List<String> erinnerungen = Arrays.asList("Die wichtigsten Infos","Musik Angebote","Musikwünsche","No-Go Lieder","Fotos","Videos","Budgetübersicht");
         List<String> dressUp = Arrays.asList("Brauthäuser","Brautmessen","Haare & Make-up","Alles beisammen?","Traditionen & Bräuche","Outfits für Trauzeugen, Brautjungfern, Groosmen","Budgetübersicht");
-        List<String> drucke = Arrays.asList("Übersicht","Save the Date","Einladungskarten","Ideen Trausprüche","Trauspruch","Kirchenprogramm","Menükarten","Danksagungen","Sonsige","Das muss besorgt werden...","Budgetübersicht");
-        List<String> flowerpower = Arrays.asList("Übersicht","Budgetübersicht");
+        List<String> drucke = Arrays.asList("Übersicht","Save the Date","Einladungskarten","Trauspruch","Kirchenprogramm","Menükarten","Danksagungen","Sonsige","Besorgungen","Budgetübersicht");
+        List<String> flowerpower = Arrays.asList("Übersicht","Florist","Budgetübersicht");
         List<String> sonstiges = Arrays.asList("Geliehenes zurückgeben","Notizen/Sonstiges","Budgetübersicht");
         List<String> ueberblick = Collections.singletonList("Budgetübersicht");
         List<String> einstellungen = Collections.singletonList("Einstellungen");

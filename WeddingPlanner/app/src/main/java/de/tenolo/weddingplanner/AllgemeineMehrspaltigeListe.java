@@ -32,12 +32,14 @@ class AllgemeineMehrspaltigeListe extends AllgemeineSuperclass {
 
     //0.2f -> FLOAT == GELD-BETRAG -> Summe am Ende ;;;;;; 0.1 -> DOUBLE == NORMALE KOMMA-ZAHL -> keine Summe am Ende
 
+    private boolean verticalTypes;
     private String[] captions;
     private float[] weights;
 
     AllgemeineMehrspaltigeListe(AllgemeinesObject object, final Context context, final Activity activity, RelativeLayout mainLayout){
         super(object, context);
 
+        verticalTypes = object.verticalTypes;
         captions = object.captions;
         weights = object.weights;
 
@@ -102,8 +104,9 @@ class AllgemeineMehrspaltigeListe extends AllgemeineSuperclass {
         LinearLayout layout = new LinearLayout(context);
 
         for(int i2=0;i2<anzahlFelder;i2++){
-            System.out.print("creating no "+i2+" with type "+types[i2].getClass().toString()+", ");
-            if (types[i2].getClass().toString().equals("class java.lang.Float")) {
+            Object type = verticalTypes ? types[i] : types[i2];
+            System.out.print("creating no "+i2+" with type "+type.getClass().toString()+", ");
+            if (type.getClass().toString().equals("class java.lang.Float")) {
                 LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, weights[i2]);
                 TextView currentVorstellungPreis = new TextView(context);
                 String text = entry[i2] + "€";
@@ -125,7 +128,7 @@ class AllgemeineMehrspaltigeListe extends AllgemeineSuperclass {
 
                 System.out.println("text: "+currentVorstellungPreis.getText());
                 layout.addView(currentVorstellungPreis, params);
-            } else if (types[i2].getClass().toString().equals("class java.lang.String")||types[i2].getClass().toString().equals("class java.util.Date")) {
+            } else if (type.getClass().toString().equals("class java.lang.String")||type.getClass().toString().equals("class java.util.Date")) {
                 LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, weights[i2]);
                 params.leftMargin = 10;
                 TextView currentGrund = new TextView(context);
@@ -145,7 +148,7 @@ class AllgemeineMehrspaltigeListe extends AllgemeineSuperclass {
 
                 System.out.println("text: "+currentGrund.getText());
                 layout.addView(currentGrund, params);
-            } else if (types[i2].getClass().toString().equals("class java.lang.Boolean")) {
+            } else if (type.getClass().toString().equals("class java.lang.Boolean")) {
 
                 final CheckBox bezahltBox = new CheckBox(context);
 
@@ -289,7 +292,8 @@ class AllgemeineMehrspaltigeListe extends AllgemeineSuperclass {
 
         final View[] editTexts = new View[anzahlFelder];
         for(int ie=1;ie<editTexts.length;ie++){
-            if (types[i].getClass().toString().equals("class java.lang.Float")) {
+            Object type = verticalTypes ? types[ie] : types[i];
+            if (type.getClass().toString().equals("class java.lang.Float")) {
                 EditText editText = new EditText(context);
                 editText.setSingleLine();
                 editText.setImeOptions(EditorInfo.IME_ACTION_NEXT);
@@ -301,8 +305,8 @@ class AllgemeineMehrspaltigeListe extends AllgemeineSuperclass {
                 }
 
                 editTexts[ie] = editText;
-            } else if (types[i].getClass().toString().equals("class java.lang.String")) {
-                if(((String)types[i]).contains("DatePickerFragment")){
+            } else if (type.getClass().toString().equals("class java.lang.String")) {
+                if(((String)type).contains("DatePickerFragment")){
                     TextView beschr = new TextView(context);
                     beschr.setText(captions[ie]);
 
@@ -366,7 +370,7 @@ class AllgemeineMehrspaltigeListe extends AllgemeineSuperclass {
 
                     editTexts[ie] = editText;
                 }
-            } else if (types[i].getClass().toString().equals("class java.lang.Boolean")) {
+            } else if (type.getClass().toString().equals("class java.lang.Boolean")) {
 
                 final CheckBox bezahlt = new CheckBox(context);
                 final TextView bezahltBeschreibung = new TextView(context);
@@ -385,7 +389,7 @@ class AllgemeineMehrspaltigeListe extends AllgemeineSuperclass {
                 bezahltLayout.addView(bezahlt);
 
                 editTexts[ie] = bezahltLayout;
-            } else if (types[i].getClass().toString().equals("class java.lang.Integer")) {
+            } else if (type.getClass().toString().equals("class java.lang.Integer")) {
                 EditText editText = new EditText(context);
                 editText.setSingleLine();
                 editText.setImeOptions(EditorInfo.IME_ACTION_NEXT);
@@ -399,7 +403,7 @@ class AllgemeineMehrspaltigeListe extends AllgemeineSuperclass {
                 editTexts[ie] = editText;
             }
             else {
-                System.err.println("NOT FOUND: "+types[i].getClass().toString());
+                System.err.println("NOT FOUND: "+type.getClass().toString());
             }
 
             dialogView.addView(editTexts[ie]);
@@ -421,7 +425,8 @@ class AllgemeineMehrspaltigeListe extends AllgemeineSuperclass {
                         df.setGroupingUsed(false);
 
                         for(int ie=1;ie<editTexts.length;ie++) {
-                            if (types[i].getClass().toString().equals("class java.lang.Float")) {
+                            Object type = verticalTypes ? types[ie] : types[i];
+                            if (type.getClass().toString().equals("class java.lang.Float")) {
                                 try {
                                     float f = Float.parseFloat(((EditText)editTexts[ie]).getText().toString());
                                     result[ie]=df.format(f);
@@ -430,8 +435,8 @@ class AllgemeineMehrspaltigeListe extends AllgemeineSuperclass {
                                     result[ie]="-";
                                 }
                             }
-                            else if(types[i].getClass().toString().equals("class java.lang.String")){
-                                if(((String)types[i]).contains("DatePickerFragment")){
+                            else if(type.getClass().toString().equals("class java.lang.String")){
+                                if(((String)type).contains("DatePickerFragment")){
                                     result[ie] = ((TextView)((LinearLayout)editTexts[ie]).getChildAt(1)).getText().toString();
                                 }
                                 else {
@@ -439,7 +444,7 @@ class AllgemeineMehrspaltigeListe extends AllgemeineSuperclass {
                                     result[ie] = s;
                                 }
                             }
-                            else if (types[i].getClass().toString().equals("class java.lang.Integer")) {
+                            else if (type.getClass().toString().equals("class java.lang.Integer")) {
                                 try {
                                     int f = Integer.parseInt(((EditText)editTexts[ie]).getText().toString());
                                     result[ie]=f+"";
@@ -448,7 +453,7 @@ class AllgemeineMehrspaltigeListe extends AllgemeineSuperclass {
                                     result[ie]="-";
                                 }
                             }
-                            else if(types[i].getClass().toString().equals("class java.lang.Boolean")){
+                            else if(type.getClass().toString().equals("class java.lang.Boolean")){
                                 String bezahltString;
                                 if(((CheckBox)((LinearLayout)editTexts[ie]).getChildAt(1)).isChecked()){
                                     bezahltString = "TRUE";

@@ -52,8 +52,6 @@ public class Startseite extends AppCompatActivity {
         }
 
         ((TextView)findViewById(R.id.tipp_tages)).setText(TIPS_OF_THE_DAY[(int) (Math.random()*TIPS_OF_THE_DAY.length)]);
-
-        prefs.edit().remove("menueplanung").apply();
     }
 
     private String[][] erstelleZeitplan(){
